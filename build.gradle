@@ -1,3 +1,7 @@
+plugins {
+    id "de.undercouch.download" version "3.0.0"
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 
@@ -14,4 +18,24 @@ dependencies {
 
     // Test dependencies
     testCompile 'junit:junit:4.12'
+}
+
+import de.undercouch.gradle.tasks.download.Download
+
+tasks.addRule("Pattern: fetchModelsForLang<ID>") { String taskName ->
+    if(taskName.startsWith("fetchModelsForLang")) {
+        task(taskName, type: Download) {
+            description = 'Downloads the models needed to run this for a given language (en, cz, etc.)'
+            def modelLang = (taskName - 'fetchModelsForLang')
+            src([
+                 'http://opennlp.sourceforge.net/models-1.5/' + modelLang + '-ner-person.bin',
+                 'http://opennlp.sourceforge.net/models-1.5/' + modelLang + '-pos-maxent.bin'
+            ])
+            dest 'resources/models'
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.4'
 }
