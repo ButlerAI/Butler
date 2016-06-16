@@ -1,11 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    <exclude-output/>
+    <content url="file://$MODULE_DIR$/">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false"/>
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false"/>
+      <excludeFolder url="file://$MODULE_DIR$/build"/>
+      <excludeFolder url="file://$MODULE_DIR$/.gradle"/>
     </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="inheritedJdk"/>
+    <orderEntry type="sourceFolder" forTests="false"/>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/Noah/.gradle/caches/modules-2/files-2.1/edu.cmu.sphinx/sphinx4-core/5prealpha-SNAPSHOT/523f86d4932fc124a6d4976adbcbc4976f1ece28/sphinx4-core-5prealpha-SNAPSHOT.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/Noah/.gradle/caches/modules-2/files-2.1/edu.cmu.sphinx/sphinx4-core/5prealpha-SNAPSHOT/bcab14f484b52bb7480e6ff12aa53427340834e2/sphinx4-core-5prealpha-SNAPSHOT-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/Noah/.gradle/caches/modules-2/files-2.1/edu.cmu.sphinx/sphinx4-data/5prealpha-SNAPSHOT/545a2d84cfe804d18cd9926a35331546fe09f2c2/sphinx4-data-5prealpha-SNAPSHOT.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/Noah/.gradle/caches/modules-2/files-2.1/edu.cmu.sphinx/sphinx4-data/5prealpha-SNAPSHOT/aac95fe73354323a427a9c0ec2d61595c83d6af7/sphinx4-data-5prealpha-SNAPSHOT-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/Noah/.gradle/caches/modules-2/files-2.1/edu.cmu.sphinx/sphinx4-samples/5prealpha-SNAPSHOT/b1a8004540ecb3835bbd8caa5dc9b77cc0b770fa/sphinx4-samples-5prealpha-SNAPSHOT.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/Noah/.gradle/caches/modules-2/files-2.1/edu.cmu.sphinx/sphinx4-samples/5prealpha-SNAPSHOT/95965bc998ac46068b396a46541a671ec8cb1a9e/sphinx4-samples-5prealpha-SNAPSHOT-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
