@@ -9,13 +9,31 @@ import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author Noah Howard
  */
 public class LanguageProcessor {
+    private List<String> stopWords = new ArrayList<String>();
+
+    public LanguageProcessor() {
+        File stopWords = new File("resources/stopwords/en.txt");
+        Scanner s = null;
+        try {
+            s = new Scanner(stopWords);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while(s.hasNext()) {
+            this.stopWords.add(s.next());
+        }
+    }
 
     public String getVerbsFromSentence(String sentence) throws IOException {
         String toReturn = "";
@@ -30,7 +48,7 @@ public class LanguageProcessor {
             String[] tags = tagger.tag(whitespaceTokenizerLine);
             for(int i = 0; i < tags.length; i++) {
                 if(tags[i].contains("V")) {
-                    toReturn += whitespaceTokenizerLine[i];
+                    toReturn += whitespaceTokenizerLine[i] + " ";
                 }
             }
         }
@@ -55,6 +73,18 @@ public class LanguageProcessor {
         }
 
         return toReturn;
+    }
+
+    public String normalizeSentance(String sentance) throws FileNotFoundException {
+        String toReturn = sentance;
+        for(String s : stopWords) {
+            for(String word : sentance.split("\\s")) {
+                if(word.toLowerCase().equals(s)) {
+                    toReturn = toReturn.replace(word, "");
+                }
+            }
+        }
+        return toReturn.trim().replaceAll("(\\s)+", "$1"); // Return normalized string with correct spacing
     }
 
 }
