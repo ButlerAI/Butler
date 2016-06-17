@@ -40,7 +40,7 @@ public class LanguageProcessorTest {
             e.printStackTrace();
         }
 
-        assertEquals("kills ", result);
+        assertEquals("kills", result);
     }
 
     @Test
@@ -52,14 +52,14 @@ public class LanguageProcessorTest {
             e.printStackTrace();
         }
 
-        assertEquals("kill have done ", result);
+        assertEquals("kill have done", result);
     }
 
     @Test
-    public void testNormalizeSentance() {
+    public void testNormalizeSentence() {
         String result = "";
         try {
-            result = languageProcessor.normalizeSentance("We did the thing");
+            result = languageProcessor.normalizeSentence("We did the thing");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

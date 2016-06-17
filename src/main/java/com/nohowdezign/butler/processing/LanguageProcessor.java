@@ -23,6 +23,7 @@ public class LanguageProcessor {
     private List<String> stopWords = new ArrayList<String>();
 
     public LanguageProcessor() {
+        // Load stop words into local variable for normalization
         File stopWords = new File("resources/stopwords/en.txt");
         Scanner s = null;
         try {
@@ -53,15 +54,15 @@ public class LanguageProcessor {
             }
         }
 
-        return toReturn;
+        return toReturn.trim().replaceAll("(\\s)+", "$1");
     }
 
-    public String tagPartsOfSpeech(String sentanceToTag) throws IOException {
+    public String tagPartsOfSpeech(String sentenceToTag) throws IOException {
         String toReturn = "";
 
         POSModel model = new POSModelLoader().load(new File("resources/models/en-pos-maxent.bin"));
         POSTaggerME tagger = new POSTaggerME(model);
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new StringReader(sentanceToTag));
+        ObjectStream<String> lineStream = new PlainTextByLineStream(new StringReader(sentenceToTag));
 
         String line;
         while ((line = lineStream.read()) != null) {
@@ -72,13 +73,13 @@ public class LanguageProcessor {
             toReturn += sample.toString();
         }
 
-        return toReturn;
+        return toReturn.trim().replaceAll("(\\s)+", "$1");
     }
 
-    public String normalizeSentance(String sentance) throws FileNotFoundException {
-        String toReturn = sentance;
+    public String normalizeSentence(String sentence) throws FileNotFoundException {
+        String toReturn = sentence;
         for(String s : stopWords) {
-            for(String word : sentance.split("\\s")) {
+            for(String word : sentence.split("\\s")) {
                 if(word.toLowerCase().equals(s)) {
                     toReturn = toReturn.replace(word, "");
                 }
