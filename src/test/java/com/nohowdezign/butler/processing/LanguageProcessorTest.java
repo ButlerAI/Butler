@@ -59,12 +59,12 @@ public class LanguageProcessorTest {
     public void testNormalizeSentence() {
         String result = "";
         try {
-            result = languageProcessor.normalizeSentence("We did the thing");
+            result = languageProcessor.normalizeSentence("What is the weather like today?");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        assertEquals("thing", result);
+        assertEquals("weather like today?", result);
     }
 
 }

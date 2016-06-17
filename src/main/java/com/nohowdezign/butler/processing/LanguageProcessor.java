@@ -81,7 +81,7 @@ public class LanguageProcessor {
         for(String s : stopWords) {
             for(String word : sentence.split("\\s")) {
                 if(word.toLowerCase().equals(s)) {
-                    toReturn = toReturn.replace(word, "");
+                    toReturn = toReturn.replaceAll("\\b" + word + "\\b", "");
                 }
             }
         }
