@@ -36,7 +36,7 @@ public class LanguageProcessor {
         }
     }
 
-    public String getVerbsFromSentence(String sentence) throws IOException {
+    public String getPartOfSpeechFromSentence(String sentence, String pos) throws IOException {
         String toReturn = "";
 
         POSModel model = new POSModelLoader().load(new File("resources/models/en-pos-maxent.bin"));
@@ -48,7 +48,7 @@ public class LanguageProcessor {
             String whitespaceTokenizerLine[] = WhitespaceTokenizer.INSTANCE.tokenize(line);
             String[] tags = tagger.tag(whitespaceTokenizerLine);
             for(int i = 0; i < tags.length; i++) {
-                if(tags[i].contains("V")) {
+                if(tags[i].contains(pos)) {
                     toReturn += whitespaceTokenizerLine[i] + " ";
                 }
             }

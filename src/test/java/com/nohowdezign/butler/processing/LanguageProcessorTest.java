@@ -3,7 +3,6 @@ package com.nohowdezign.butler.processing;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -35,7 +34,7 @@ public class LanguageProcessorTest {
     public void testGetVerbsFromSentence() {
         String result = "";
         try {
-            result = languageProcessor.getVerbsFromSentence("The quick brown fox kills the lazy Butler.");
+            result = languageProcessor.getPartOfSpeechFromSentence("The quick brown fox kills the lazy Butler.", "V");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,7 +46,7 @@ public class LanguageProcessorTest {
     public void testGetMultipleVerbsFromSentence() {
         String result = "";
         try {
-            result = languageProcessor.getVerbsFromSentence("When you kill someone, have you done the killing?");
+            result = languageProcessor.getPartOfSpeechFromSentence("When you kill someone, have you done the killing?", "V");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,11 +59,24 @@ public class LanguageProcessorTest {
         String result = "";
         try {
             result = languageProcessor.normalizeSentence("What is the weather like today?");
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         assertEquals("weather like today?", result);
+    }
+
+    @Test
+    public void testGetSentenceSubject() {
+        String result = "";
+        try {
+            result = languageProcessor.normalizeSentence("Where is the nearest tennis court?");
+            result = languageProcessor.getPartOfSpeechFromSentence(result, "NN");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals("weather", result);
     }
 
 }

@@ -46,6 +46,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Butler.iml" filepath="$PROJECT_DIR$/Butler.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/modules/TestModule/modules/TestModule.iml" filepath="$PROJECT_DIR$/modules/TestModule/modules/TestModule.iml"/>
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-type="JavaSDK" assert-jdk-15="true" project-jdk-name="1.8">
