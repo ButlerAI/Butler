@@ -13,25 +13,34 @@ public class ModuleRunner {
         new Thread() {
             @Override
             public void run() {
-                runModule();
+                ModuleRunner  moduleRunner = new ModuleRunner();
+                moduleRunner.runModule();
             }
         }.start();
     }
 
-    private static void runModule() {
+    private void runModule() {
         for (Class<?> handler : ModuleRegistry.getModuleClasses()) {
             Method[] methods = handler.getMethods();
 
             for (int i = 0; i < methods.length; ++i) {
-                Initialize initializeMethod = methods[i].getAnnotation(Initialize.class);
-                if (initializeMethod != null) {
-                    try {
-                        methods[i].invoke(handler.newInstance());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                findAndRunInitializeMethods(handler, methods, i);
             }
+        }
+    }
+
+    private void findAndRunInitializeMethods(Class<?> handler, Method[] methods, int i) {
+        Initialize initializeMethod = methods[i].getAnnotation(Initialize.class);
+        if (initializeMethod != null) {
+            runInitMethod(methods, handler, i);
+        }
+    }
+
+    private void runInitMethod(Method[] methods, Class<?> handler, int i) {
+        try {
+            methods[i].invoke(handler.newInstance());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
