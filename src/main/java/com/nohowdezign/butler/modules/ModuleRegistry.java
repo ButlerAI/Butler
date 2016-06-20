@@ -3,21 +3,30 @@ package com.nohowdezign.butler.modules;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * @author Noah Howard
  */
 public class ModuleRegistry {
-    private static final List<Class> moduleClasses = new ArrayList<>();
+    private static final List<HashMap<String, Class>> moduleClasses = new ArrayList<>();
 
     public static List<Class> getModuleClasses() {
-        return moduleClasses;
+        List<Class> toReturn = null;
+        for(HashMap<String, Class> map : moduleClasses) {
+            for(Class c : map.values()) {
+                toReturn.add(c);
+            }
+        }
+        return toReturn;
     }
 
-    public void addModuleClass(Class moduleClass) {
+    public void addModuleClass(String subject, Class moduleClass) {
         if(moduleClass.getAnnotation(ModuleLogic.class) != null) {
-            this.moduleClasses.add(moduleClass); // Only add class to registry if it is a main class
+            HashMap<String, Class> map = new HashMap<>();
+            map.put(subject, moduleClass);
+            this.moduleClasses.add(map); // Only add class to registry if it is a main class
         }
     }
 }

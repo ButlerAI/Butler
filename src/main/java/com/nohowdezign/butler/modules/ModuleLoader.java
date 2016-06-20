@@ -1,5 +1,7 @@
 package com.nohowdezign.butler.modules;
 
+import com.nohowdezign.butler.modules.annotations.ModuleLogic;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -45,7 +47,9 @@ public class ModuleLoader {
             String className = je.getName().substring(0, je.getName().length() - 6);
             className = className.replace('/', '.');
             Class c = cl.loadClass(className);
-            registry.addModuleClass(c);
+            ModuleLogic logic = (ModuleLogic) c.getAnnotation(ModuleLogic.class);
+            System.out.println(logic.subjectWord());
+            registry.addModuleClass(logic.subjectWord(), c);
         }
     }
 

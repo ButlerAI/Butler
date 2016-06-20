@@ -8,5 +8,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ModuleLogic {
-    String subjectWord = "";
+    String subjectWord() default "";
 }
