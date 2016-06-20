@@ -13,7 +13,7 @@ public class ModuleRegistry {
     private static final List<HashMap<String, Class>> moduleClasses = new ArrayList<>();
 
     public static List<Class> getModuleClasses() {
-        List<Class> toReturn = null;
+        List<Class> toReturn = new ArrayList<>();
         for(HashMap<String, Class> map : moduleClasses) {
             for(Class c : map.values()) {
                 toReturn.add(c);

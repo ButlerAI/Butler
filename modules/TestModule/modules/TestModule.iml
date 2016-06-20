@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$/..">
-      <sourceFolder url="file://$MODULE_DIR$/../src/main/java" isTestSource="false" />
+    <exclude-output/>
+    <content url="file:///home/noah/Documents/code/java/Butler/modules/TestModule">
+      <sourceFolder url="file://$MODULE_DIR$/../src/main/java" isTestSource="false"/>
+      <excludeFolder url="file:///home/noah/Documents/code/java/Butler/modules/TestModule/build"/>
+      <excludeFolder url="file:///home/noah/Documents/code/java/Butler/modules/TestModule/.gradle"/>
     </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="module" module-name="Butler" />
-    <orderEntry type="module" module-name="Butler_main" exported="" />
-    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="inheritedJdk"/>
+    <orderEntry type="sourceFolder" forTests="false"/>
   </component>
 </module>

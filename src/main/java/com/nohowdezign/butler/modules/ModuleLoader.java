@@ -1,6 +1,8 @@
 package com.nohowdezign.butler.modules;
 
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,16 +16,19 @@ import java.util.jar.JarFile;
  * @author Noah Howard
  */
 public class ModuleLoader {
+    private Logger logger = LoggerFactory.getLogger(ModuleLoader.class);
     private ModuleRegistry registry = new ModuleRegistry();
 
-    public void loadModulesFromDirectory(String directoryName) throws IOException, ClassNotFoundException {
+    public void loadModulesFromDirectory(String directoryName) throws
+            IOException, ClassNotFoundException {
         File moduleDirectory = new File(directoryName);
 
         if(moduleDirectory.listFiles() != null) {
             for(File plugin : moduleDirectory.listFiles()) {
                 if(plugin.exists() && !plugin.isDirectory()) {
                     if(plugin.getName().endsWith(".jar")) {
-                        System.out.println("PLUGIN FOUND!");
+                        logger.debug("Found plugin: " + plugin.getName());
+
                         loadModuleByJarname(plugin.getAbsolutePath());
                     } // TODO: Implement loading compiled .class files instead of just .jar's
                 }
@@ -32,6 +37,7 @@ public class ModuleLoader {
     }
 
     private void loadModuleByJarname(String filename) throws IOException, ClassNotFoundException {
+        logger.debug("Processing classes");
         JarFile jarFile = new JarFile(filename);
         Enumeration<JarEntry> e = jarFile.entries();
 
@@ -45,11 +51,17 @@ public class ModuleLoader {
             }
             // -6 because of it needs to remove the .class extension
             String className = je.getName().substring(0, je.getName().length() - 6);
+            logger.debug("Found class: " + className);
             className = className.replace('/', '.');
             Class c = cl.loadClass(className);
             ModuleLogic logic = (ModuleLogic) c.getAnnotation(ModuleLogic.class);
-            System.out.println(logic.subjectWord());
-            registry.addModuleClass(logic.subjectWord(), c);
+            try {
+                logger.debug("This is a logic class. " +
+                        "Trigger subject is " + logic.subjectWord() + ". Registering module");
+                registry.addModuleClass(logic.subjectWord(), c);
+            } catch(NullPointerException exception) {
+                logger.error("Annotation not found in class " + c.getName());
+            }
         }
     }
 

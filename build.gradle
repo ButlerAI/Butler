@@ -15,6 +15,8 @@ dependencies {
     compile group: 'edu.cmu.sphinx', name: 'sphinx4-core', version:'5prealpha-SNAPSHOT'
     compile group: 'edu.cmu.sphinx', name: 'sphinx4-data', version:'5prealpha-SNAPSHOT'
     compile group: 'edu.cmu.sphinx', name: 'sphinx4-samples', version:'5prealpha-SNAPSHOT'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
 
     // Test dependencies
     testCompile 'junit:junit:4.12'
