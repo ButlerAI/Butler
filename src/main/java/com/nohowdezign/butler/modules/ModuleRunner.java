@@ -1,6 +1,8 @@
 package com.nohowdezign.butler.modules;
 
 import com.nohowdezign.butler.modules.annotations.Initialize;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 
@@ -8,37 +10,44 @@ import java.lang.reflect.Method;
  * @author Noah Howard
  */
 public class ModuleRunner {
+    private Logger logger = LoggerFactory.getLogger(ModuleRunner.class);
 
-    public static void moduleRunner() {
+    public void runModuleForSubject(String subject) {
+        Class c = ModuleRegistry.getModuleClassForSubject(subject);
+        if(c != null) {
+            logger.debug(String.format("Found module %s for subject %s", c.getName(), subject));
+            moduleRunner(c);
+        }
+    }
+
+    private void moduleRunner(Class c) {
         new Thread() {
             @Override
             public void run() {
-                ModuleRunner  moduleRunner = new ModuleRunner();
-                moduleRunner.runModule();
+                ModuleRunner moduleRunner = new ModuleRunner();
+                moduleRunner.runModule(c);
             }
         }.start();
     }
 
-    private void runModule() {
-        for (Class<?> handler : ModuleRegistry.getModuleClasses()) {
-            Method[] methods = handler.getMethods();
-
-            for (int i = 0; i < methods.length; ++i) {
-                findAndRunInitializeMethods(handler, methods, i);
-            }
+    private void runModule(Class handler) {
+        for(Method method : handler.getMethods()) {
+            logger.debug("Found method " + method.getName());
+            findAndRunInitializeMethods(handler, method);
         }
     }
 
-    private void findAndRunInitializeMethods(Class<?> handler, Method[] methods, int i) {
-        Initialize initializeMethod = methods[i].getAnnotation(Initialize.class);
+    private void findAndRunInitializeMethods(Class<?> handler, Method method) {
+        Initialize initializeMethod = method.getAnnotation(Initialize.class);
         if (initializeMethod != null) {
-            runInitMethod(methods, handler, i);
+            logger.debug("Initialize method found: " + method.getName());
+            runInitMethod(method, handler);
         }
     }
 
-    private void runInitMethod(Method[] methods, Class<?> handler, int i) {
+    private void runInitMethod(Method method, Class<?> handler) {
         try {
-            methods[i].invoke(handler.newInstance());
+            method.invoke(handler.newInstance());
         } catch (Exception e) {
             e.printStackTrace();
         }
