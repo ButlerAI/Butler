@@ -1,13 +1,43 @@
 package com.nohowdezign.butler;
 
+import com.nohowdezign.butler.modules.ModuleLoader;
+import com.nohowdezign.butler.modules.ModuleRegistry;
+import com.nohowdezign.butler.processing.LanguageProcessor;
+import org.junit.Before;
+
+import java.io.IOException;
+
 /**
- * Created by Noah on 6/15/2016.
+ * @author Noah Howard
  */
 public class ButlerTest {
 
+    @Before
+    public void init() {
+        ModuleLoader loader = new ModuleLoader();
+        try {
+            loader.loadModulesFromDirectory("./modules");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     @org.junit.Test
     public void testStartButlerSuite() {
-        //TODO: Write da test
+        LanguageProcessor languageProcessor = new LanguageProcessor();
+        String partsOfSentence = "";
+        try {
+            partsOfSentence = languageProcessor.getPartOfSpeechFromSentence("What is the weather like?", "NN");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for(String s : partsOfSentence.split(" ")) {
+            if(ModuleRegistry.getModuleClassForSubject(s) != null) {
+                //TODO: Run the module first module that matches and throw some shit at the neural network
+            }
+        }
     }
 
 }
