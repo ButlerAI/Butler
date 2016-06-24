@@ -7,8 +7,8 @@ import java.util.HashMap;
  * @author Noah Howard
  */
 public class NeuralNet {
-    // Maps a subject string, right or wrong to a return query
-    private HashMap<HashMap<String, Class>, Boolean> subjectList = new HashMap<>();
+    // Maps a subject string, return class to a weight float
+    private HashMap<HashMap<String, Class>, Float> choiceList = new HashMap<>();
 
 
 }
