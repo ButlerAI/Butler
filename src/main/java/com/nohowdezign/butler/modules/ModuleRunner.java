@@ -16,18 +16,8 @@ public class ModuleRunner {
         Class c = ModuleRegistry.getModuleClassForSubject(subject);
         if(c != null) {
             logger.debug(String.format("Found module %s for subject %s", c.getName(), subject));
-            moduleRunner(c);
+            runModule(c);
         }
-    }
-
-    private void moduleRunner(Class c) {
-        new Thread() {
-            @Override
-            public void run() {
-                ModuleRunner moduleRunner = new ModuleRunner();
-                moduleRunner.runModule(c);
-            }
-        }.start();
     }
 
     private void runModule(Class handler) {
