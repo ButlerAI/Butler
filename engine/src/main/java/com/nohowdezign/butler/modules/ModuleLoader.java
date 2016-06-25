@@ -30,6 +30,9 @@ public class ModuleLoader {
                         logger.info("Loading plugin: " + plugin.getName());
                         loadModuleByJarname(plugin.getAbsolutePath());
                     } // TODO: Implement loading compiled .class files instead of just .jar's
+                } else if(plugin.isDirectory()) {
+                    logger.debug("Found directory, doing recursive scan");
+                    loadModulesFromDirectory(plugin.getAbsolutePath());
                 }
             }
         }
