@@ -1,91 +1,44 @@
 package com.nohowdezign.butler.processing;
 
-import opennlp.tools.cmdline.postag.POSModelLoader;
-import opennlp.tools.postag.POSModel;
-import opennlp.tools.postag.POSSample;
-import opennlp.tools.postag.POSTaggerME;
-import opennlp.tools.tokenize.WhitespaceTokenizer;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import edu.stanford.nlp.simple.Sentence;
 
 /**
  * @author Noah Howard
  */
 public class LanguageProcessor {
-    private List<String> stopWords = new ArrayList<String>();
 
     public LanguageProcessor() {
-        // Load stop words into local variable for normalization
-        File stopWords = new File("resources/stopwords/en.txt");
-        Scanner s = null;
-        try {
-            s = new Scanner(stopWords);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        while(s.hasNext()) {
-            this.stopWords.add(s.next());
-        }
     }
 
-    public String getPartOfSpeechFromSentence(String sentence, String pos) throws IOException {
+    public String getPartOfSpeechFromSentence(String sentence, String pos) {
         String toReturn = "";
-
-        POSModel model = new POSModelLoader().load(new File("resources/models/en-pos-maxent.bin"));
-        POSTaggerME tagger = new POSTaggerME(model);
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new StringReader(sentence));
-
-        String line;
-        while ((line = lineStream.read()) != null) {
-            String whitespaceTokenizerLine[] = WhitespaceTokenizer.INSTANCE.tokenize(line);
-            String[] tags = tagger.tag(whitespaceTokenizerLine);
-            for(int i = 0; i < tags.length; i++) {
-                if(tags[i].contains(pos)) {
-                    toReturn += whitespaceTokenizerLine[i] + " ";
-                }
+        Sentence sentence1 = new Sentence(sentence);
+        for(int i = 0; i < sentence1.words().size(); i++) {
+            if(sentence1.posTags().get(i).contains(pos)) {
+                toReturn += sentence1.words().get(i) + " ";
             }
         }
-
-        return toReturn.trim().replaceAll("(\\s)+", "$1");
+        return toReturn;
     }
 
-    public String tagPartsOfSpeech(String sentenceToTag) throws IOException {
+    public String tagPartsOfSpeech(String sentence) {
         String toReturn = "";
-
-        POSModel model = new POSModelLoader().load(new File("resources/models/en-pos-maxent.bin"));
-        POSTaggerME tagger = new POSTaggerME(model);
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new StringReader(sentenceToTag));
-
-        String line;
-        while ((line = lineStream.read()) != null) {
-            String whitespaceTokenizerLine[] = WhitespaceTokenizer.INSTANCE.tokenize(line);
-            String[] tags = tagger.tag(whitespaceTokenizerLine);
-
-            POSSample sample = new POSSample(whitespaceTokenizerLine, tags);
-            toReturn += sample.toString();
+        Sentence sentence1 = new Sentence(sentence);
+        for(int i = 0; i < sentence1.words().size(); i++) {
+            toReturn += sentence1.words().get(i) + "_" + sentence1.posTags().get(i) + " ";
         }
-
-        return toReturn.trim().replaceAll("(\\s)+", "$1");
+        return toReturn;
     }
 
-    public String normalizeSentence(String sentence) throws FileNotFoundException {
-        String toReturn = sentence;
-        for(String s : stopWords) {
-            for(String word : sentence.split("\\s")) {
-                if(word.toLowerCase().equals(s)) {
-                    toReturn = toReturn.replaceAll("\\b" + word + "\\b", "");
-                }
+    public String getSubject(String sentence) {
+        String toReturn = "";
+        Sentence sentence1 = new Sentence(sentence);
+        for(int i = 0; i < sentence1.incomingDependencyLabels().size(); i++) {
+            if(sentence1.incomingDependencyLabel(i).get().equals("nsubj")) {
+                toReturn = sentence1.word(i);
             }
         }
-        return toReturn.trim().replaceAll("(\\s)+", "$1"); // Return normalized string with correct spacing
+        return toReturn;
     }
 
 }

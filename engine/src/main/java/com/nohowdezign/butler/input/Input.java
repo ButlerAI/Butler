@@ -31,9 +31,7 @@ public abstract class Input {
 
     protected String processUserInput(String inputToProcess) throws IOException {
         LanguageProcessor languageProcessor = new LanguageProcessor();
-        String toReturn = languageProcessor.normalizeSentence(inputToProcess);
-        languageProcessor.getPartOfSpeechFromSentence(toReturn, "NN");
-        return toReturn;
+        return languageProcessor.getPartOfSpeechFromSentence(inputToProcess, "NN");
     }
 
 }

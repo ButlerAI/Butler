@@ -28,11 +28,8 @@ public class ButlerTest {
     public void testStartButlerSuite() {
         LanguageProcessor languageProcessor = new LanguageProcessor();
         String partsOfSentence = "";
-        try {
-            partsOfSentence = languageProcessor.getPartOfSpeechFromSentence("What is the weather like?", "NN");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        partsOfSentence = languageProcessor.getPartOfSpeechFromSentence("What is the weather like?", "NN");
+
         for(String s : partsOfSentence.split(" ")) {
             if(ModuleRegistry.getModuleClassForSubject(s) != null) {
                 //TODO: Run the module first module that matches and throw some shit at the neural network
