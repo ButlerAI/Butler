@@ -42,4 +42,8 @@ public class ModuleRegistry {
             moduleClasses.add(map); // Only add class to registry if it is a main class
         }
     }
+
+    public void reset() {
+        moduleClasses.clear();
+    }
 }

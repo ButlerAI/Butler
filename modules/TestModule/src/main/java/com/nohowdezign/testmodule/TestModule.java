@@ -10,8 +10,8 @@ import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 public class TestModule {
 
     @Initialize
-    public void initTest() {
-        System.out.println("TEST");
+    public void initTest(String query) {
+        System.out.println("testefst");
     }
 
 }

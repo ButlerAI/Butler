@@ -12,32 +12,39 @@ import java.lang.reflect.Method;
 public class ModuleRunner {
     private Logger logger = LoggerFactory.getLogger(ModuleRunner.class);
 
-    public void runModuleForSubject(String subject) {
+    public void runModuleForSubject(String subject, String originalQuery) {
         Class c = ModuleRegistry.getModuleClassForSubject(subject);
         if(c != null) {
             logger.debug(String.format("Found module %s for subject %s", c.getName(), subject));
-            runModule(c);
+            runModule(c, originalQuery);
         }
     }
 
-    private void runModule(Class handler) {
+    private void runModule(Class handler, String originalQuery) {
         for(Method method : handler.getMethods()) {
             logger.debug("Found method " + method.getName());
-            findAndRunInitializeMethods(handler, method);
+            findAndRunInitializeMethods(handler, method, originalQuery);
         }
     }
 
-    private void findAndRunInitializeMethods(Class<?> handler, Method method) {
+    private void findAndRunInitializeMethods(Class<?> handler, Method method, String originalQuery) {
         Initialize initializeMethod = method.getAnnotation(Initialize.class);
         if (initializeMethod != null) {
             logger.debug("Initialize method found: " + method.getName());
-            runInitMethod(method, handler);
+            runInitMethod(method, handler, originalQuery);
         }
     }
 
-    private void runInitMethod(Method method, Class<?> handler) {
+    private void runInitMethod(Method method, Class<?> handler, String originalQuery) {
         try {
-            method.invoke(handler.newInstance());
+            Class<?>[] methodParams = method.getParameterTypes();
+
+            if(methodParams.length < 1) {
+                logger.debug("This method does not need a query string.");
+                method.invoke(handler.newInstance());
+            } else {
+                method.invoke(handler.newInstance(), originalQuery);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

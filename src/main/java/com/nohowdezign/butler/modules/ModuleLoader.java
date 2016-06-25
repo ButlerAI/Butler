@@ -27,8 +27,7 @@ public class ModuleLoader {
             for(File plugin : moduleDirectory.listFiles()) {
                 if(plugin.exists() && !plugin.isDirectory()) {
                     if(plugin.getName().endsWith(".jar")) {
-                        logger.debug("Found plugin: " + plugin.getName());
-
+                        logger.info("Loading plugin: " + plugin.getName());
                         loadModuleByJarname(plugin.getAbsolutePath());
                     } // TODO: Implement loading compiled .class files instead of just .jar's
                 }

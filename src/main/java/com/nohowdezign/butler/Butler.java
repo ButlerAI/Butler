@@ -1,5 +1,7 @@
 package com.nohowdezign.butler;
 
+import com.nohowdezign.butler.input.CLIInput;
+import com.nohowdezign.butler.input.Input;
 import com.nohowdezign.butler.modules.ModuleLoader;
 import com.nohowdezign.butler.modules.ModuleRegistry;
 import com.nohowdezign.butler.modules.ModuleRunner;
@@ -37,29 +39,9 @@ public class Butler {
         logger.info("Initializing language processor...");
         LanguageProcessor languageProcessor = new LanguageProcessor();
 
-        try {
-            logger.info(String.format("Butler v. %1$,.2f loaded. Now listening for input.", Constants.VERSION));
-            butler.readUserInput(languageProcessor);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void readUserInput(LanguageProcessor processor) throws IOException {
-        System.out.print("? ");
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        String line = "";
-        while(!line.equalsIgnoreCase("end conversation")) {
-            line = in.readLine();
-            String pos = processor.normalizeSentence(line);
-            pos = processor.getPartOfSpeechFromSentence(pos, "NN");
-            for(String s : pos.split(" ")) {
-                ModuleRunner moduleRunner = new ModuleRunner();
-                moduleRunner.runModuleForSubject(s);
-            }
-            System.out.print("? ");
-        }
-        in.close();
+        logger.info(String.format("Butler v. %1$,.2f loaded. Now listening for input.", Constants.VERSION));
+        Input input = new CLIInput(languageProcessor);
+        input.listenForInput();
     }
 
     private void printInit() {
