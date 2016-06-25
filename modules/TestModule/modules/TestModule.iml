@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module relativePaths="true" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output/>
-    <orderEntry type="inheritedJdk"/>
-    <content url="file:///home/noah/Documents/code/java/Butler/modules/TestModule">
-      <sourceFolder url="file:///home/noah/Documents/code/java/Butler/modules/TestModule/src/main/java" isTestSource="false"/>
-      <excludeFolder url="file:///home/noah/Documents/code/java/Butler/modules/TestModule/build"/>
-      <excludeFolder url="file:///home/noah/Documents/code/java/Butler/modules/TestModule/.gradle"/>
-    </content>
-    <orderEntry type="sourceFolder" forTests="false"/>
+<module version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <orderEntry type="sourceFolder" forTests="false" />
   </component>
-  <component name="ModuleRootManager"/>
 </module>

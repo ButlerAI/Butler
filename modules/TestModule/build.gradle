@@ -1,2 +1,11 @@
 apply plugin: 'java'
 apply plugin: 'idea'
+
+dependencies {
+    compile project(':engine')
+}
+
+def myJar = file('modules/TestModule.jar')
+artifacts {
+    archives myJar
+}

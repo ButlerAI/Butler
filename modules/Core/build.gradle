@@ -7,6 +7,13 @@ repositories {
 }
 
 dependencies {
-    compile project(':Butler:Butler_main')
+    compile project(':engine')
     compile group: 'org.bitpipeline.lib', name: 'owm-lib', version: '2.1.3-SNAPSHOT'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
+}
+
+def myJar = file('modules/Core.jar')
+artifacts {
+    archives myJar
 }
