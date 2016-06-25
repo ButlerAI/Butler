@@ -1,8 +1,11 @@
-apply plugin: 'java'
-apply plugin: 'idea'
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/groups/public/" }
+}
 
 dependencies {
     compile project(':engine')
+    compile group: 'org.bitpipeline.lib', name: 'owm-lib', version: '2.1.3-SNAPSHOT'
 }
 
 def myJar = file('modules/TestModule.jar')

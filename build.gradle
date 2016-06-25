@@ -4,6 +4,16 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'application'
+
+run.doFirst {
+    //
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+}
 
 import de.undercouch.gradle.tasks.download.Download
 

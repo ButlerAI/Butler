@@ -1,6 +1,3 @@
-apply plugin: 'java'
-apply plugin: 'idea'
-
 repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
