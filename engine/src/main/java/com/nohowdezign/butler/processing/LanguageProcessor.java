@@ -18,7 +18,7 @@ public class LanguageProcessor {
                 toReturn += sentence1.words().get(i) + " ";
             }
         }
-        return toReturn;
+        return toReturn.trim().replaceAll("(\\s)+", "$1");
     }
 
     public String tagPartsOfSpeech(String sentence) {
@@ -27,7 +27,7 @@ public class LanguageProcessor {
         for(int i = 0; i < sentence1.words().size(); i++) {
             toReturn += sentence1.words().get(i) + "_" + sentence1.posTags().get(i) + " ";
         }
-        return toReturn;
+        return toReturn.trim().replaceAll("(\\s)+", "$1");
     }
 
     public String getSubject(String sentence) {
@@ -38,7 +38,27 @@ public class LanguageProcessor {
                 toReturn = sentence1.word(i);
             }
         }
-        return toReturn;
+        return toReturn.trim().replaceAll("(\\s)+", "$1");
+    }
+
+    public String getNamedEntities(String sentence) {
+        String toReturn = "";
+        Sentence sentence1 = new Sentence(sentence);
+        for(int i = 0; i < sentence1.nerTags().size(); i++) {
+            toReturn += sentence1.word(i) + "_" + sentence1.nerTag(i) + " ";
+        }
+        return toReturn.trim().replaceAll("(\\s)+", "$1");
+    }
+
+    public String getNamedEntity(String sentence, String entity) {
+        String toReturn = "";
+        Sentence sentence1 = new Sentence(sentence);
+        for(int i = 0; i < sentence1.nerTags().size(); i++) {
+            if(sentence1.nerTag(i).contains(entity)) {
+                toReturn += sentence1.word(i) + " ";
+            }
+        }
+        return toReturn.trim().replaceAll("(\\s)+", "$1");
     }
 
 }
