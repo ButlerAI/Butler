@@ -4,6 +4,7 @@ import com.nohowdezign.butler.modules.annotations.Initialize;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 import com.nohowdezign.butler.processing.LanguageProcessor;
 import org.bitpipeline.lib.owm.OwmClient;
+import org.bitpipeline.lib.owm.WeatherData;
 import org.bitpipeline.lib.owm.WeatherStatusResponse;
 import org.json.JSONException;
 
@@ -19,10 +20,18 @@ public class Weather {
     public void provideWeather(String query) {
         try {
             LanguageProcessor languageProcessor = new LanguageProcessor();
-            String placesOrDays = languageProcessor.getPartOfSpeechFromSentence(query, "NNP");
             OwmClient client = new OwmClient();
-            WeatherStatusResponse response = client.currentWeatherAtCity("Searsmont", "ME");
-            System.out.println(query);
+            WeatherStatusResponse response;
+            String loc = languageProcessor.getNamedEntity(query, "LOCATION");
+            System.out.println(loc);
+            if(loc.equals("")) {
+                response = client.currentWeatherAtCity("Searsmont", "ME");
+            } else {
+                response = client.currentWeatherAtCity(loc);
+            }
+
+            WeatherData weather = response.getWeatherStatus().get(0);
+            System.out.println("It is currently " + weather.getTemp() + " degrees and " + weather.getWeatherConditions() + " in " + loc);
         } catch(Exception e) {
             e.printStackTrace();
         }
