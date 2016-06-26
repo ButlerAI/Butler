@@ -62,7 +62,7 @@ public class ModuleLoader {
                         "Trigger subject is " + logic.subjectWord() + ". Registering module");
                 registry.addModuleClass(logic.subjectWord(), c);
             } catch(NullPointerException exception) {
-                logger.error("Annotation not found in class " + c.getName());
+                logger.debug("Annotation not found in class " + c.getName());
             }
         }
     }

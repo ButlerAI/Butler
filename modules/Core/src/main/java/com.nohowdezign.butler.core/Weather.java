@@ -25,7 +25,7 @@ public class Weather {
             String loc = languageProcessor.getNamedEntity(query, "LOCATION");
             System.out.println(loc);
             if(loc.equals("")) {
-                response = client.currentWeatherAtCity("Searsmont", "ME");
+                response = client.currentWeatherAtCity("Syracuse");
             } else {
                 response = client.currentWeatherAtCity(loc);
             }

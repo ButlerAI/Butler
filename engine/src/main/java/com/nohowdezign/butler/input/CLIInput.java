@@ -24,7 +24,7 @@ public class CLIInput extends Input {
             System.out.print("? ");
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             String line = "";
-            while (!line.equalsIgnoreCase("end conversation")) {
+            while (!line.equalsIgnoreCase("goodbye butler")) {
                 line = in.readLine();
                 for (String s : processUserInput(line).split(" ")) {
                     ModuleRunner moduleRunner = new ModuleRunner();
