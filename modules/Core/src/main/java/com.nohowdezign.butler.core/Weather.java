@@ -9,7 +9,7 @@ import net.aksingh.owmjapis.OpenWeatherMap;
 /**
  * @author Noah Howard
  */
-@ModuleLogic(subjectWord = "weather")
+@ModuleLogic(subjectWord = "weather temperature")
 public class Weather {
 
     @Initialize
@@ -25,7 +25,7 @@ public class Weather {
                 response = client.currentWeatherByCityName(loc.replace(" ", "%20"));
             }
 
-            System.out.println("It is currently " + celciusToFahrenheit(kelvinToCelcius(response.getMainInstance().getTemperature())) + " degrees in " + response.getCityName());
+            System.out.println("It is currently " + response.getMainInstance().getTemperature() + " degrees in " + response.getCityName());
         } catch(Exception e) {
             e.printStackTrace();
         }

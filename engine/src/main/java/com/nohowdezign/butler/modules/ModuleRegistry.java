@@ -25,9 +25,11 @@ public class ModuleRegistry {
     public static Class getModuleClassForSubject(String subject) {
         Class toReturn = null;
         for(HashMap<String, Class> map : moduleClasses) {
-            if(map.containsKey(subject)) {
-                for (Class c : map.values()) {
-                    toReturn = c;
+            for(String key : map.keySet()) {
+                if(key.toLowerCase().contains(subject)) {
+                    for (Class c : map.values()) {
+                        toReturn = c;
+                    }
                 }
             }
         }
