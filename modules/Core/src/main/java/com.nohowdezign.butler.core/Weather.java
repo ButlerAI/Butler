@@ -3,12 +3,8 @@ package com.nohowdezign.butler.core;
 import com.nohowdezign.butler.modules.annotations.Initialize;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 import com.nohowdezign.butler.processing.LanguageProcessor;
-import org.bitpipeline.lib.owm.OwmClient;
-import org.bitpipeline.lib.owm.WeatherData;
-import org.bitpipeline.lib.owm.WeatherStatusResponse;
-import org.json.JSONException;
-
-import java.io.IOException;
+import net.aksingh.owmjapis.CurrentWeather;
+import net.aksingh.owmjapis.OpenWeatherMap;
 
 /**
  * @author Noah Howard
@@ -20,21 +16,31 @@ public class Weather {
     public void provideWeather(String query) {
         try {
             LanguageProcessor languageProcessor = new LanguageProcessor();
-            OwmClient client = new OwmClient();
-            WeatherStatusResponse response;
+            OpenWeatherMap client = new OpenWeatherMap("a3379e5d05fb282ef41a97a5930139a1");
+            CurrentWeather response;
             String loc = languageProcessor.getNamedEntity(query, "LOCATION");
-            System.out.println(loc);
             if(loc.equals("")) {
-                response = client.currentWeatherAtCity("Syracuse");
+                response = client.currentWeatherByCityName("Syracuse");
             } else {
-                response = client.currentWeatherAtCity(loc);
+                response = client.currentWeatherByCityName(loc.replace(" ", "%20"));
             }
 
-            WeatherData weather = response.getWeatherStatus().get(0);
-            System.out.println("It is currently " + weather.getTemp() + " degrees and " + weather.getWeatherConditions() + " in " + loc);
+            System.out.println("It is currently " + celciusToFahrenheit(kelvinToCelcius(response.getMainInstance().getTemperature())) + " degrees in " + response.getCityName());
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private float celciusToFahrenheit(float degCelcius) {
+        float degFahrenheit;
+        degFahrenheit = degCelcius * 9/5 + 32;
+        return degFahrenheit;
+    }
+
+    private float kelvinToCelcius(float degKelvin) {
+        float degCelcius;
+        degCelcius = degKelvin - 273.15f;
+        return degCelcius;
     }
 
 }
