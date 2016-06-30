@@ -31,16 +31,4 @@ public class Weather {
         }
     }
 
-    private float celciusToFahrenheit(float degCelcius) {
-        float degFahrenheit;
-        degFahrenheit = degCelcius * 9/5 + 32;
-        return degFahrenheit;
-    }
-
-    private float kelvinToCelcius(float degKelvin) {
-        float degCelcius;
-        degCelcius = degKelvin - 273.15f;
-        return degCelcius;
-    }
-
 }

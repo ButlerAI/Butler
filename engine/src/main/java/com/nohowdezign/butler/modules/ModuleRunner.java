@@ -12,10 +12,10 @@ import java.lang.reflect.Method;
  */
 public class ModuleRunner {
     private Logger logger = LoggerFactory.getLogger(ModuleRunner.class);
+    private NeuralNet neuralNet = new NeuralNet(); // Only instantiate this once
 
     public void runModuleForSubject(String subject, String originalQuery) {
-        NeuralNet neuralNet = new NeuralNet(); // Only instansiate this once
-        Class c = null;
+        Class c;
         if(neuralNet.getActionForSubject(subject) != null) {
             c = neuralNet.getActionForSubject(subject);
         } else {

@@ -24,10 +24,10 @@ public class CLIInput extends Input {
             System.out.print("? ");
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             String line = "";
+            ModuleRunner moduleRunner = new ModuleRunner();
             while (!line.equalsIgnoreCase("goodbye butler")) {
                 line = in.readLine();
                 for (String s : processUserInput(line).split(" ")) {
-                    ModuleRunner moduleRunner = new ModuleRunner();
                     moduleRunner.runModuleForSubject(s, line);
                 }
                 System.out.print("? ");
