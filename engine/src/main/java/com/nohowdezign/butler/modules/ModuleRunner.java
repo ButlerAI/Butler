@@ -1,5 +1,6 @@
 package com.nohowdezign.butler.modules;
 
+import com.nohowdezign.butler.brain.NeuralNet;
 import com.nohowdezign.butler.modules.annotations.Initialize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,14 @@ public class ModuleRunner {
     private Logger logger = LoggerFactory.getLogger(ModuleRunner.class);
 
     public void runModuleForSubject(String subject, String originalQuery) {
-        Class c = ModuleRegistry.getModuleClassForSubject(subject);
+        NeuralNet neuralNet = new NeuralNet(); // Only instansiate this once
+        Class c = null;
+        if(neuralNet.getActionForSubject(subject) != null) {
+            c = neuralNet.getActionForSubject(subject);
+        } else {
+            c = ModuleRegistry.getModuleClassForSubject(subject);
+            neuralNet.addSubjectToList(subject, c);
+        }
         if(c != null) {
             logger.debug(String.format("Found module %s for subject %s", c.getName(), subject));
             runModule(c, originalQuery);
