@@ -2,6 +2,8 @@ package com.nohowdezign.butler.modules;
 
 import com.nohowdezign.butler.brain.NeuralNet;
 import com.nohowdezign.butler.modules.annotations.Initialize;
+import com.nohowdezign.butler.responder.DefaultResponse;
+import com.nohowdezign.butler.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,19 +14,17 @@ import java.lang.reflect.Method;
  */
 public class ModuleRunner {
     private Logger logger = LoggerFactory.getLogger(ModuleRunner.class);
-    private NeuralNet neuralNet = new NeuralNet(); // Only instantiate this once
 
-    public void runModuleForSubject(String subject, String originalQuery) {
-        Class c;
-        if(neuralNet.getActionForSubject(subject) != null) {
-            c = neuralNet.getActionForSubject(subject);
-        } else {
-            c = ModuleRegistry.getModuleClassForSubject(subject);
-            neuralNet.addSubjectToList(subject, c);
-        }
+    public void runModuleForSubject(String subject, String originalQuery, ModuleLoader loader) {
+        Class c = ModuleRegistry.getModuleClassForSubject(subject);
+
         if(c != null) {
             logger.debug(String.format("Found module %s for subject %s", c.getName(), subject));
             runModule(c, originalQuery);
+        } else {
+            logger.debug("Running default response");
+            DefaultResponse defaultResponse = new DefaultResponse();
+            defaultResponse.run(subject, originalQuery, Constants.DEFAULT_RESPONDER, loader);
         }
     }
 
@@ -47,11 +47,11 @@ public class ModuleRunner {
         try {
             Class<?>[] methodParams = method.getParameterTypes();
 
-            if(methodParams.length < 1) {
-                logger.debug("This method does not need a query string.");
-                method.invoke(handler.newInstance());
+            if(methodParams.length < 2) {
+                logger.debug("This method does not need a query string, but it needs a responder.");
+                method.invoke(handler.newInstance(), Constants.DEFAULT_RESPONDER);
             } else {
-                method.invoke(handler.newInstance(), originalQuery);
+                method.invoke(handler.newInstance(), originalQuery, Constants.DEFAULT_RESPONDER);
             }
         } catch (Exception e) {
             e.printStackTrace();

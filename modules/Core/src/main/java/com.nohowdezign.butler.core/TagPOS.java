@@ -3,6 +3,7 @@ package com.nohowdezign.butler.core;
 import com.nohowdezign.butler.modules.annotations.Initialize;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 import com.nohowdezign.butler.processing.LanguageProcessor;
+import com.nohowdezign.butler.responder.Responder;
 
 import java.io.IOException;
 
@@ -13,7 +14,7 @@ import java.io.IOException;
 public class TagPOS {
 
     @Initialize
-    public void run(String query) throws IOException {
+    public void run(String query, Responder responder) throws IOException {
         String response = query.replaceAll("tag ", "");
         LanguageProcessor languageProcessor = new LanguageProcessor();
         System.out.println(languageProcessor.tagPartsOfSpeech(response));

@@ -34,4 +34,6 @@ public abstract class Input {
         return languageProcessor.getPartOfSpeechFromSentence(inputToProcess, "NN");
     }
 
+    public abstract String getNextInput();
+
 }

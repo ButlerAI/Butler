@@ -1,5 +1,6 @@
 package com.nohowdezign.butler.input;
 
+import com.nohowdezign.butler.modules.ModuleLoader;
 import com.nohowdezign.butler.modules.ModuleRunner;
 import com.nohowdezign.butler.processing.LanguageProcessor;
 
@@ -12,10 +13,13 @@ import java.io.InputStreamReader;
  */
 public class CLIInput extends Input {
     private LanguageProcessor processor = new LanguageProcessor();
+    private boolean isNextInput = false;
+    private ModuleLoader loader;
 
-    public CLIInput(LanguageProcessor processor) {
+    public CLIInput(LanguageProcessor processor, ModuleLoader loader) {
         this.processor = processor;
-        this.inputMethod = "CLI";
+        this.loader = loader;
+        this.inputMethod = "cli";
     }
 
     @Override
@@ -23,19 +27,28 @@ public class CLIInput extends Input {
         try {
             System.out.print("? ");
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            String line = "";
             ModuleRunner moduleRunner = new ModuleRunner();
-            while (!line.equalsIgnoreCase("goodbye butler")) {
-                line = in.readLine();
-                for (String s : processUserInput(line).split(" ")) {
-                    moduleRunner.runModuleForSubject(s, line);
+            while (!input.equalsIgnoreCase("goodbye butler")) {
+                input = in.readLine();
+                isNextInput = true;
+                for (String s : processUserInput(input).split(" ")) {
+                    moduleRunner.runModuleForSubject(s, input, loader);
                 }
+                isNextInput = false;
                 System.out.print("? ");
             }
             in.close();
         } catch(IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getNextInput() {
+        if(isNextInput) {
+            return input;
+        }
+        return null;
     }
 
 }

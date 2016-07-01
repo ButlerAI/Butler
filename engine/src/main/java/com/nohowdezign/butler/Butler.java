@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
  */
 public class Butler {
     private static Logger logger = LoggerFactory.getLogger(Butler.class);
+    private static Input input;
 
     public static void main(String[] args) {
         Butler butler = new Butler();
@@ -30,9 +31,7 @@ public class Butler {
             logger.info("Loading modules...");
             moduleLoader.loadModulesFromDirectory("./modules");
             logger.info("Modules loaded.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -40,8 +39,12 @@ public class Butler {
         LanguageProcessor languageProcessor = new LanguageProcessor();
 
         logger.info(String.format("Butler v. %1$,.2f loaded. Now listening for input.", Constants.VERSION));
-        Input input = new CLIInput(languageProcessor);
+        input = new CLIInput(languageProcessor, moduleLoader);
         input.listenForInput();
+    }
+
+    public static Input getDefaultInput() {
+        return input;
     }
 
     private void printInit() {

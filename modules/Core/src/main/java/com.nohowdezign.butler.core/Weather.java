@@ -3,6 +3,7 @@ package com.nohowdezign.butler.core;
 import com.nohowdezign.butler.modules.annotations.Initialize;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 import com.nohowdezign.butler.processing.LanguageProcessor;
+import com.nohowdezign.butler.responder.Responder;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
 
@@ -13,7 +14,7 @@ import net.aksingh.owmjapis.OpenWeatherMap;
 public class Weather {
 
     @Initialize
-    public void provideWeather(String query) {
+    public void provideWeather(String query, Responder responder) {
         try {
             LanguageProcessor languageProcessor = new LanguageProcessor();
             OpenWeatherMap client = new OpenWeatherMap("a3379e5d05fb282ef41a97a5930139a1");
@@ -25,7 +26,7 @@ public class Weather {
                 response = client.currentWeatherByCityName(loc.replace(" ", "%20"));
             }
 
-            System.out.println("It is currently " + response.getMainInstance().getTemperature() + " degrees in " + response.getCityName());
+            responder.respondWithMessage("It is currently " + response.getMainInstance().getTemperature() + " degrees in " + response.getCityName());
         } catch(Exception e) {
             e.printStackTrace();
         }

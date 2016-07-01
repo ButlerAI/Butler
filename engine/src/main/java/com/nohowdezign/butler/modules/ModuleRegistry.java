@@ -15,9 +15,7 @@ public class ModuleRegistry {
     public static List<Class> getModuleClasses() {
         List<Class> toReturn = new ArrayList<>();
         for(HashMap<String, Class> map : moduleClasses) {
-            for(Class c : map.values()) {
-                toReturn.add(c);
-            }
+            toReturn.addAll(map.values());
         }
         return toReturn;
     }
