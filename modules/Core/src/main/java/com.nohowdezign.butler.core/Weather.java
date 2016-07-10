@@ -1,6 +1,6 @@
 package com.nohowdezign.butler.core;
 
-import com.nohowdezign.butler.modules.annotations.Initialize;
+import com.nohowdezign.butler.modules.annotations.Execute;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 import com.nohowdezign.butler.processing.LanguageProcessor;
 import com.nohowdezign.butler.responder.Responder;
@@ -13,7 +13,7 @@ import net.aksingh.owmjapis.OpenWeatherMap;
 @ModuleLogic(subjectWord = "weather temperature")
 public class Weather {
 
-    @Initialize
+    @Execute
     public void provideWeather(String query, Responder responder) {
         try {
             LanguageProcessor languageProcessor = new LanguageProcessor();

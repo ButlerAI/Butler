@@ -1,11 +1,14 @@
 package com.nohowdezign.butler.modules;
 
+import com.nohowdezign.butler.modules.annotations.Initialize;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
+import com.nohowdezign.butler.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
@@ -61,9 +64,28 @@ public class ModuleLoader {
                 logger.debug("This is a logic class. " +
                         "Trigger subject is " + logic.subjectWord() + ". Registering module");
                 registry.addModuleClass(logic.subjectWord(), c);
+                initializeModule(c);
             } catch(NullPointerException exception) {
                 logger.debug("Annotation not found in class " + c.getName());
             }
+        }
+    }
+
+    private void initializeModule(Class c) {
+        for(Method m : c.getMethods()) {
+            if(m.isAnnotationPresent(Initialize.class)) {
+                findAndRunInitializeMethods(c, m);
+            }
+        }
+    }
+
+    private void findAndRunInitializeMethods(Class<?> handler, Method method) {
+        Initialize initMethod = method.getAnnotation(Initialize.class);
+        try {
+            Class<?>[] methodParams = method.getParameterTypes();
+            method.invoke(handler.newInstance(), Constants.DEFAULT_RESPONDER);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

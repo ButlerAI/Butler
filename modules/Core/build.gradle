@@ -9,6 +9,7 @@ configurations {
 
 dependencies {
     compile project(':engine')
+    compile project(':modules:Profile')
     // OpenWeatherMap Client and dependencies
     compile 'net.aksingh:owm-japis:2.5.0.3'
     compile group: 'org.json', name: 'json', version: '20140107'

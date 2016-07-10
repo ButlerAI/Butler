@@ -2,6 +2,7 @@ package com.nohowdezign.butler.input;
 
 import com.nohowdezign.butler.modules.ModuleLoader;
 import com.nohowdezign.butler.modules.ModuleRunner;
+import com.nohowdezign.butler.utils.Constants;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import edu.cmu.sphinx.api.SpeechResult;
@@ -32,6 +33,7 @@ public class VoiceInput extends Input {
             recognizer.startRecognition(true);
             SpeechResult result;
             ModuleRunner moduleRunner = new ModuleRunner();
+            Constants.DEFAULT_RESPONDER.respondWithMessage("I am ready to assist sir.");
             while((result = recognizer.getResult()) != null) {
                 input = result.getHypothesis(); // Set the input to the speech recognizer's hypothesis
                 logger.info("Running module for query: " + input);

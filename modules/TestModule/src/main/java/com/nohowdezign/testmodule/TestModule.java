@@ -1,6 +1,6 @@
 package com.nohowdezign.testmodule;
 
-import com.nohowdezign.butler.modules.annotations.Initialize;
+import com.nohowdezign.butler.modules.annotations.Execute;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 import com.nohowdezign.butler.responder.Responder;
 
@@ -10,7 +10,7 @@ import com.nohowdezign.butler.responder.Responder;
 @ModuleLogic(subjectWord = "foobar")
 public class TestModule {
 
-    @Initialize
+    @Execute
     public void initTest(String query, Responder responder) {
         responder.respondWithMessage("testefst");
     }
