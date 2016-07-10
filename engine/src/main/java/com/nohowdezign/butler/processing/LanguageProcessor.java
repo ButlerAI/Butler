@@ -12,13 +12,17 @@ public class LanguageProcessor {
 
     public String getPartOfSpeechFromSentence(String sentence, String pos) {
         String toReturn = "";
-        Sentence sentence1 = new Sentence(sentence);
-        for(int i = 0; i < sentence1.words().size(); i++) {
-            if(sentence1.posTags().get(i).contains(pos)) {
-                toReturn += sentence1.words().get(i) + " ";
+        if(sentence != "") {
+            Sentence sentence1 = new Sentence(sentence);
+            for (int i = 0; i < sentence1.words().size(); i++) {
+                if (sentence1.posTags().get(i).contains(pos)) {
+                    toReturn += sentence1.words().get(i) + " ";
+                }
             }
+            return toReturn.trim().replaceAll("(\\s)+", "$1");
+        } else {
+            return null;
         }
-        return toReturn.trim().replaceAll("(\\s)+", "$1");
     }
 
     public String tagPartsOfSpeech(String sentence) {

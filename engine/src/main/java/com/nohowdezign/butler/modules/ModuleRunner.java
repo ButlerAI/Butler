@@ -1,8 +1,6 @@
 package com.nohowdezign.butler.modules;
 
-import com.nohowdezign.butler.brain.NeuralNet;
 import com.nohowdezign.butler.modules.annotations.Initialize;
-import com.nohowdezign.butler.responder.DefaultResponse;
 import com.nohowdezign.butler.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +21,6 @@ public class ModuleRunner {
             runModule(c, originalQuery);
         } else {
             logger.debug("Running default response");
-            DefaultResponse defaultResponse = new DefaultResponse();
-            defaultResponse.run(subject, originalQuery, Constants.DEFAULT_RESPONDER, loader);
         }
     }
 

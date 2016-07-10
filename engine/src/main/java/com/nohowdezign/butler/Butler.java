@@ -1,19 +1,14 @@
 package com.nohowdezign.butler;
 
-import com.nohowdezign.butler.input.CLIInput;
 import com.nohowdezign.butler.input.Input;
+import com.nohowdezign.butler.input.VoiceInput;
 import com.nohowdezign.butler.modules.ModuleLoader;
-import com.nohowdezign.butler.modules.ModuleRegistry;
-import com.nohowdezign.butler.modules.ModuleRunner;
 import com.nohowdezign.butler.processing.LanguageProcessor;
 import com.nohowdezign.butler.utils.Constants;
-import com.nohowdezign.butler.voice.VoiceInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * @author Noah Howard
@@ -39,7 +34,7 @@ public class Butler {
         LanguageProcessor languageProcessor = new LanguageProcessor();
 
         logger.info(String.format("Butler v. %1$,.2f loaded. Now listening for input.", Constants.VERSION));
-        input = new CLIInput(languageProcessor, moduleLoader);
+        input = new VoiceInput(moduleLoader);
         input.listenForInput();
     }
 

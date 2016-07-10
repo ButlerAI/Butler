@@ -2,7 +2,6 @@ package com.nohowdezign.butler.input;
 
 import com.nohowdezign.butler.modules.ModuleLoader;
 import com.nohowdezign.butler.modules.ModuleRunner;
-import com.nohowdezign.butler.processing.LanguageProcessor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,12 +11,10 @@ import java.io.InputStreamReader;
  * @author Noah Howard
  */
 public class CLIInput extends Input {
-    private LanguageProcessor processor = new LanguageProcessor();
     private boolean isNextInput = false;
     private ModuleLoader loader;
 
-    public CLIInput(LanguageProcessor processor, ModuleLoader loader) {
-        this.processor = processor;
+    public CLIInput(ModuleLoader loader) {
         this.loader = loader;
         this.inputMethod = "cli";
     }
