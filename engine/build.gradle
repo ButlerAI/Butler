@@ -19,6 +19,7 @@ dependencies {
     compile "org.mobicents.external.freetts:cmutimelex:1.0"
     compile "org.mobicents.external.freetts:en_us:1.0"
     compile group: 'org.mobicents.external.freetts', name: 'cmulex', version: '1.0'
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.7.2'
 
     // Test dependencies
     testCompile 'junit:junit:4.12'

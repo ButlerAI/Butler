@@ -1,5 +1,6 @@
 package com.nohowdezign.butler;
 
+import com.nohowdezign.butler.database.UserProfile;
 import com.nohowdezign.butler.input.Input;
 import com.nohowdezign.butler.input.VoiceInput;
 import com.nohowdezign.butler.modules.ModuleLoader;
@@ -27,11 +28,15 @@ public class Butler {
             moduleLoader.loadModulesFromDirectory("./modules");
             logger.info("Modules loaded.");
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.debug(e.getLocalizedMessage());
         }
 
         logger.info("Initializing language processor...");
         LanguageProcessor languageProcessor = new LanguageProcessor();
+
+        logger.info("Opening connection to user database...");
+        UserProfile profile = new UserProfile();
+        profile.load();
 
         logger.info(String.format("Butler v. %1$,.2f loaded. Now listening for input.", Constants.VERSION));
         input = new VoiceInput(moduleLoader);

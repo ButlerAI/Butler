@@ -1,5 +1,6 @@
 package com.nohowdezign.butler.core;
 
+import com.nohowdezign.butler.database.UserProfile;
 import com.nohowdezign.butler.modules.annotations.Execute;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 import com.nohowdezign.butler.processing.LanguageProcessor;
@@ -12,6 +13,7 @@ import net.aksingh.owmjapis.OpenWeatherMap;
  */
 @ModuleLogic(subjectWord = "weather temperature")
 public class Weather {
+    private UserProfile profile = new UserProfile();
 
     @Execute
     public void provideWeather(String query, Responder responder) {
@@ -21,7 +23,7 @@ public class Weather {
             CurrentWeather response;
             String loc = languageProcessor.getNamedEntity(query, "LOCATION");
             if(loc.equals("")) {
-                response = client.currentWeatherByCityName("Syracuse");
+                response = client.currentWeatherByCityName(profile.getUserLocation(UserProfile.DEFAULT_USER));
             } else {
                 response = client.currentWeatherByCityName(loc.replace(" ", "%20"));
             }
