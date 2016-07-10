@@ -25,8 +25,8 @@ public class VoiceInput extends Input {
             Configuration configuration = new Configuration();
 
             configuration.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
-            configuration.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
-            configuration.setLanguageModelPath("file:resources/en-us.lm");
+            configuration.setDictionaryPath("file:resources/models/en-us.dict");
+            configuration.setLanguageModelPath("file:resources/models/en-us.lm");
 
             LiveSpeechRecognizer recognizer = new LiveSpeechRecognizer(configuration);
             recognizer.startRecognition(true);
