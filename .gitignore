@@ -19,6 +19,3 @@ gradle.properties
 /*.iml
 /*.ipr
 /*.iws
-
-# Butler models (downloaded by Gradle)
-resources/models/*
