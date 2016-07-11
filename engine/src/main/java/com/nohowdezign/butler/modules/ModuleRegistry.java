@@ -23,6 +23,7 @@ public class ModuleRegistry {
     public static Class getModuleClassForSubject(String subject) {
         Class toReturn = null;
         for(HashMap<String, Class> map : moduleClasses) {
+            System.out.println(map);
             for(String key : map.keySet()) {
                 if(key.toLowerCase().contains(subject)) {
                     for (Class c : map.values()) {
@@ -38,7 +39,9 @@ public class ModuleRegistry {
     public void addModuleClass(String subject, Class moduleClass) {
         if(moduleClass.getAnnotation(ModuleLogic.class) != null) {
             HashMap<String, Class> map = new HashMap<>();
-            map.put(subject, moduleClass);
+            for(String s : subject.split("\\s")) {
+                map.put(s, moduleClass);
+            }
             moduleClasses.add(map); // Only add class to registry if it is a main class
         }
     }
