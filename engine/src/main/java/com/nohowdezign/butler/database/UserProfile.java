@@ -1,5 +1,8 @@
 package com.nohowdezign.butler.database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,6 +12,7 @@ import java.util.List;
  * @author Noah Howard
  */
 public class UserProfile {
+    private static Logger logger = LoggerFactory.getLogger(UserProfile.class);
     public static String DEFAULT_USER;
     private Database db = new Database();
     private List<String> users = new ArrayList<>();
@@ -28,7 +32,7 @@ public class UserProfile {
                     this.users.add(DEFAULT_USER);
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.debug(e.getLocalizedMessage());
             }
         }
     }
@@ -43,7 +47,7 @@ public class UserProfile {
         try {
             toReturn = set.getString("location");
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.debug(e.getLocalizedMessage());
         }
 
         return toReturn;

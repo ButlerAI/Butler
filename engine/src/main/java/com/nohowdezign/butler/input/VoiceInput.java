@@ -14,6 +14,7 @@ import java.io.IOException;
  */
 public class VoiceInput extends Input {
     private ModuleLoader loader;
+    private boolean isActive = false;
 
     public VoiceInput(ModuleLoader loader) {
         this.loader = loader;
@@ -33,12 +34,22 @@ public class VoiceInput extends Input {
             recognizer.startRecognition(true);
             SpeechResult result;
             ModuleRunner moduleRunner = new ModuleRunner();
-            Constants.DEFAULT_RESPONDER.respondWithMessage("I am ready to assist sir.");
+            Constants.DEFAULT_RESPONDER.respondWithMessage("I am ready to assist.");
             while((result = recognizer.getResult()) != null) {
+                result.getHypothesis();
                 input = result.getHypothesis(); // Set the input to the speech recognizer's hypothesis
-                logger.info("Running module for query: " + input);
-                for(String s : processUserInput(input).split(" ")) {
-                    moduleRunner.runModuleForSubject(s, input, loader);
+                logger.info("Got input: " + input);
+                if(isActive) {
+                    for (String s : processUserInput(input).split(" ")) {
+                        moduleRunner.runModuleForSubject(s, input, loader);
+                    }
+                    isActive = false;
+                } else if(input.contains("butler")) {
+                    Constants.DEFAULT_RESPONDER.respondWithMessage("Yes?");
+                    isActive = true;
+                } else if(input.contains("goodbye")) {
+                    Constants.DEFAULT_RESPONDER.respondWithMessage("Goodbye, talk to you later.");
+                    System.exit(1);
                 }
             }
             recognizer.stopRecognition();
