@@ -1,0 +1,13 @@
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/groups/public/" }
+}
+
+dependencies {
+    compile project(':engine')
+}
+
+def myJar = file('modules/Calendar.jar')
+artifacts {
+    archives myJar
+}

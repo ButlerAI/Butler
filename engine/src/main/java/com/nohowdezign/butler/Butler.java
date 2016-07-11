@@ -35,12 +35,22 @@ public class Butler {
         LanguageProcessor languageProcessor = new LanguageProcessor();
 
         logger.info("Opening connection to user database...");
-        UserProfile profile = new UserProfile();
-        profile.load();
+        new Thread() {
+            @Override
+            public void run() {
+                UserProfile profile = new UserProfile();
+                profile.load();
+            }
+        }.start();
 
         logger.info(String.format("Butler v. %1$,.2f loaded. Now listening for input.", Constants.VERSION));
-        input = new VoiceInput(moduleLoader);
-        input.listenForInput();
+        new Thread() {
+            @Override
+            public void run() {
+                input = new VoiceInput(moduleLoader);
+                input.listenForInput();
+            }
+        }.start();
     }
 
     public static Input getDefaultInput() {

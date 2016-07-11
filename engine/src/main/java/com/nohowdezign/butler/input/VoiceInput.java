@@ -40,8 +40,14 @@ public class VoiceInput extends Input {
                 input = result.getHypothesis(); // Set the input to the speech recognizer's hypothesis
                 logger.info("Got input: " + input);
                 if(isActive) {
-                    for (String s : processUserInput(input).split(" ")) {
-                        moduleRunner.runModuleForSubject(s, input, loader);
+                    for(String s : processUserInput(input).split(" ")) {
+                        // Run module in new thread
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                moduleRunner.runModuleForSubject(s, input, loader);
+                            }
+                        }.start();
                     }
                     isActive = false;
                 } else if(input.contains("butler")) {

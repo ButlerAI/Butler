@@ -2,12 +2,17 @@ package com.nohowdezign.butler.processing;
 
 import edu.stanford.nlp.simple.Sentence;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * @author Noah Howard
  */
 public class LanguageProcessor {
 
     public LanguageProcessor() {
+        // Init the tagger models
+        List<Optional<String>> testSentence = new Sentence("skjdf").incomingDependencyLabels();
     }
 
     public String getPartOfSpeechFromSentence(String sentence, String pos) {
