@@ -1,6 +1,7 @@
 package com.nohowdezign.butler;
 
 import com.nohowdezign.butler.database.UserProfile;
+import com.nohowdezign.butler.input.CLIInput;
 import com.nohowdezign.butler.input.Input;
 import com.nohowdezign.butler.input.VoiceInput;
 import com.nohowdezign.butler.modules.ModuleLoader;
@@ -47,7 +48,7 @@ public class Butler {
         new Thread() {
             @Override
             public void run() {
-                input = new VoiceInput(moduleLoader);
+                input = new CLIInput(moduleLoader);
                 input.listenForInput();
             }
         }.start();

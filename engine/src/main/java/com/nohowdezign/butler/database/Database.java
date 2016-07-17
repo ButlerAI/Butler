@@ -33,4 +33,24 @@ public class Database {
         return null;
     }
 
+    /**
+     * Check is a certain column exists in the database for a certain table
+     * @param table is the table to check
+     * @param columnName is the column to look for
+     * @return is whether the column exists or not
+     */
+    public boolean doesColumnExist(String table, String columnName) {
+        ResultSet set = executeQuery(String.format("PRAGMA TABLE_INFO (%s);", table));
+        try {
+            while (set.next()) {
+                if (set.getString("name") == columnName) {
+                    return true;
+                }
+            }
+        } catch(SQLException e) {
+            logger.debug(e.getLocalizedMessage());
+        }
+        return false;
+    }
+
 }

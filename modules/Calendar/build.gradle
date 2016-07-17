@@ -5,6 +5,8 @@ repositories {
 
 dependencies {
     compile project(':engine')
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
 }
 
 def myJar = file('modules/Calendar.jar')

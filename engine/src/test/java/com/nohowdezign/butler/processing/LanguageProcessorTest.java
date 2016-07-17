@@ -1,5 +1,6 @@
 package com.nohowdezign.butler.processing;
 
+import edu.stanford.nlp.ling.CoreAnnotations;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,7 +43,7 @@ public class LanguageProcessorTest {
 
     @Test
     public void getNamedEntities() {
-        String result = languageProcessor.getNamedEntities("What is the weather in Bar Harbor?");
+        String result = languageProcessor.getNamedEntities("Set an alarm for tomorrow at six am.");
         assertEquals("What_O is_O the_O weather_O in_O Bar_LOCATION Harbor_LOCATION ?_O", result);
     }
 
@@ -50,6 +51,15 @@ public class LanguageProcessorTest {
     public void getLocationFromSentence() {
         String result = languageProcessor.getNamedEntity("What is the weather in Bar Harbor?", "LOCATION");
         assertEquals("Bar Harbor", result);
+    }
+
+    @Test
+    public void testGetValueOfToken() {
+        String test = languageProcessor.getNamedEntity("Set an alarm for tomorrow at six am.", "DATE");
+        System.out.println(test);
+        String result = languageProcessor.getNamedEntityValue("Set an alarm for six am.",
+                CoreAnnotations.TokensAnnotation.class, "DATE");
+        System.out.println(result);
     }
 
 }

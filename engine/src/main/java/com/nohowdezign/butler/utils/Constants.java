@@ -1,5 +1,6 @@
 package com.nohowdezign.butler.utils;
 
+import com.nohowdezign.butler.responder.CLIResponder;
 import com.nohowdezign.butler.responder.Responder;
 import com.nohowdezign.butler.responder.VoiceResponder;
 
@@ -8,5 +9,5 @@ import com.nohowdezign.butler.responder.VoiceResponder;
  */
 public class Constants {
     public static double VERSION = 0.01;
-    public static Responder DEFAULT_RESPONDER = new VoiceResponder();
+    public static Responder DEFAULT_RESPONDER = new CLIResponder();
 }

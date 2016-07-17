@@ -1,5 +1,7 @@
 package com.nohowdezign.butler.processing;
 
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.simple.Sentence;
 
 import java.util.List;
@@ -68,6 +70,18 @@ public class LanguageProcessor {
             }
         }
         return toReturn.trim().replaceAll("(\\s)+", "$1");
+    }
+
+    public String getNamedEntityValue(String sentance, Class tokenType, String entity) {
+        String toReturn = "";
+        Sentence sentence1 = new Sentence(sentance);
+        for(CoreLabel token : sentence1.asCoreLabels()) {
+            //if(token.getString(CoreAnnotations.NamedEntityTagAnnotation.class) == entity) {
+            //    toReturn = token.getString(tokenType);
+            //}
+            toReturn += token.getString(tokenType);
+        }
+        return toReturn;
     }
 
 }

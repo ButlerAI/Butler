@@ -53,4 +53,32 @@ public class UserProfile {
         return toReturn;
     }
 
+    /**
+     * Adds a generic attribute to the profile, formatted as a string
+     * @param attribute the name of the column to add
+     */
+    public void addAttributeToProfile(String attribute) {
+        if(!db.doesColumnExist("users", attribute)) {
+            db.executeQuery(String.format("ALTER TABLE users ADD COLUMN %s VARCHAR;", attribute));
+        }
+    }
+
+    /**
+     * Get a dynamic attribute from the profile
+     * @param columnName is the name of the column to get the attribute from
+     * @param attributeType is the type of attribute, such as 'type' = 'value'
+     * @param attributeValue the value of the attribute to get
+     */
+    public String getAttributeFromProfile(String columnName, String attributeType, String attributeValue) {
+        String toReturn = "";
+        ResultSet set = db.executeQuery(String.format("SELECT * FROM users where %s = '%s'",
+                columnName, attributeType, attributeValue));
+        try {
+            toReturn = set.getString(columnName);
+        } catch (SQLException e) {
+            logger.debug(e.getLocalizedMessage());
+        }
+        return toReturn;
+    }
+
 }
