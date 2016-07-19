@@ -4,12 +4,8 @@ import com.nohowdezign.butler.database.Database;
 import com.nohowdezign.butler.database.UserProfile;
 import com.nohowdezign.butler.intent.AbstractIntent;
 import com.nohowdezign.butler.intent.annotations.Intent;
-import com.nohowdezign.butler.modules.annotations.Execute;
 import com.nohowdezign.butler.modules.annotations.Initialize;
-import com.nohowdezign.butler.modules.annotations.ModuleLogic;
-import com.nohowdezign.butler.processing.LanguageProcessor;
 import com.nohowdezign.butler.responder.Responder;
-import edu.stanford.nlp.ling.CoreAnnotations;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,11 +39,10 @@ public class Alarm {
 
     @Intent(keyword = "alarm")
     public void setAlarm(AbstractIntent intent, Responder responder) {
-        LanguageProcessor processor = new LanguageProcessor();
         String time = intent.getOptionalArguments().get("DATE");
 
         // Attempt to load in the time the user wakes up
-        if(time.equals("")) {
+        if(time == null) {
             UserProfile profile = new UserProfile();
             if(database.doesColumnExist("users", "wakeTime")) {
                 time = profile.getAttributeFromProfile("wakeTime", "name", UserProfile.DEFAULT_USER);

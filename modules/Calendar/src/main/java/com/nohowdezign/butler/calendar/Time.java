@@ -2,8 +2,6 @@ package com.nohowdezign.butler.calendar;
 
 import com.nohowdezign.butler.intent.AbstractIntent;
 import com.nohowdezign.butler.intent.annotations.Intent;
-import com.nohowdezign.butler.modules.annotations.Execute;
-import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 import com.nohowdezign.butler.responder.Responder;
 
 import java.time.LocalDateTime;

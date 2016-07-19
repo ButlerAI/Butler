@@ -5,7 +5,7 @@ import com.nohowdezign.butler.input.CLIInput;
 import com.nohowdezign.butler.input.Input;
 import com.nohowdezign.butler.input.VoiceInput;
 import com.nohowdezign.butler.modules.ModuleLoader;
-import com.nohowdezign.butler.processing.LanguageProcessor;
+import com.nohowdezign.butler.modules.ModuleRegistry;
 import com.nohowdezign.butler.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +31,7 @@ public class Butler {
         } catch (IOException | ClassNotFoundException e) {
             logger.debug(e.getLocalizedMessage());
         }
-
-        logger.info("Initializing language processor...");
-        LanguageProcessor languageProcessor = new LanguageProcessor();
+        logger.debug(String.format("Loaded modules: %s", ModuleRegistry.getModuleClasses()));
 
         logger.info("Opening connection to user database...");
         new Thread() {

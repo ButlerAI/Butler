@@ -1,6 +1,5 @@
 package com.nohowdezign.butler.input;
 
-import com.nohowdezign.butler.processing.LanguageProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +29,7 @@ public abstract class Input {
     }
 
     protected String processUserInput(String inputToProcess) throws IOException {
-        LanguageProcessor languageProcessor = new LanguageProcessor();
-        return languageProcessor.getPartOfSpeechFromSentence(inputToProcess, "NN");
+        return inputToProcess;
     }
 
     public abstract String getNextInput();

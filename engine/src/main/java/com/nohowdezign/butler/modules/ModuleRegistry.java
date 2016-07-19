@@ -1,7 +1,5 @@
 package com.nohowdezign.butler.modules;
 
-import com.nohowdezign.butler.modules.annotations.ModuleLogic;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,9 +21,8 @@ public class ModuleRegistry {
     public static Class getModuleClassForIntent(String intent) {
         Class toReturn = null;
         for(HashMap<String, Class> map : moduleClasses) {
-            System.out.println(map);
             for(String key : map.keySet()) {
-                if(key.toLowerCase().contains(intent)) {
+                if(key.toLowerCase().equalsIgnoreCase(intent)) {
                     for (Class c : map.values()) {
                         toReturn = c;
                     }

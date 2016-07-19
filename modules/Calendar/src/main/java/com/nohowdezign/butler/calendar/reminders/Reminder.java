@@ -1,11 +1,8 @@
 package com.nohowdezign.butler.calendar.reminders;
 
-import com.nohowdezign.butler.database.Database;
+import com.nohowdezign.butler.intent.AbstractIntent;
 import com.nohowdezign.butler.intent.annotations.Intent;
-import com.nohowdezign.butler.modules.annotations.Execute;
 import com.nohowdezign.butler.modules.annotations.Initialize;
-import com.nohowdezign.butler.modules.annotations.ModuleLogic;
-import com.nohowdezign.butler.processing.LanguageProcessor;
 import com.nohowdezign.butler.responder.Responder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +19,9 @@ public class Reminder {
     }
 
     @Intent(keyword = "remind")
-    public void addReminder(String query, Responder responder) {
-        LanguageProcessor languageProcessor = new LanguageProcessor();
+    public void addReminder(AbstractIntent intent, Responder responder) {
         // Check for the time a user wants the reminder in the query
-        if(languageProcessor.getNamedEntity(query, "DATE") != null) {
+        if(intent.getOptionalArguments().get("DATE") != null) {
             logger.debug("The input has a date!");
         }
     }

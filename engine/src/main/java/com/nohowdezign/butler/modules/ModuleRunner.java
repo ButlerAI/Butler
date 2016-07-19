@@ -2,7 +2,6 @@ package com.nohowdezign.butler.modules;
 
 import com.nohowdezign.butler.intent.AbstractIntent;
 import com.nohowdezign.butler.intent.annotations.Intent;
-import com.nohowdezign.butler.modules.annotations.Execute;
 import com.nohowdezign.butler.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

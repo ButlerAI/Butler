@@ -1,7 +1,9 @@
 package com.nohowdezign.butler.input;
 
+import com.nohowdezign.butler.intent.AbstractIntent;
 import com.nohowdezign.butler.intent.IntentParser;
 import com.nohowdezign.butler.modules.ModuleLoader;
+import com.nohowdezign.butler.modules.ModuleRegistry;
 import com.nohowdezign.butler.modules.ModuleRunner;
 
 import java.io.BufferedReader;
@@ -26,12 +28,12 @@ public class CLIInput extends Input {
             System.out.print("? ");
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             ModuleRunner moduleRunner = new ModuleRunner();
-            IntentParser intentParser = new IntentParser();
-            while (!input.equalsIgnoreCase("goodbye butler")) {
+            while(!input.equalsIgnoreCase("goodbye butler")) {
                 input = in.readLine();
                 isNextInput = true;
-                for (String s : processUserInput(input).split(" ")) {
-                    moduleRunner.runModuleForSubject(s, intentParser.parseIntentFromSentence(input), loader);
+                AbstractIntent intent = new IntentParser().parseIntentFromSentence(input);
+                if(ModuleRegistry.getModuleClassForIntent(intent.getIntentType()) != null) {
+                    moduleRunner.runModuleForSubject(intent.getIntentType(), intent, loader);
                 }
                 isNextInput = false;
                 System.out.print("? ");
