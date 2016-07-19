@@ -35,6 +35,7 @@ public class Alarm {
                 e.printStackTrace();
             }
         }
+        System.out.println("Initialized Alarm");
     }
 
     @Intent(keyword = "alarm")

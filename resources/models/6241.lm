@@ -1,0 +1,71 @@
+Language model created by QuickLM on Tue Jul 19 13:56:37 EDT 2016
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 5 sentences and 14 words
+
+\data\
+ngram 1=14
+ngram 2=18
+ngram 3=16
+
+\1-grams:
+-1.0492 </s> -0.3010
+-1.0492 <s> -0.2604
+-1.7482 BOSTON? -0.2604
+-1.4472 BUTLER -0.2604
+-1.7482 HELLO -0.2852
+-1.7482 HEY -0.2852
+-1.7482 IN -0.2932
+-1.2711 IS -0.2771
+-1.7482 IT? -0.2604
+-1.4472 THE -0.2852
+-1.7482 TIME -0.2771
+-1.7482 WEATHER -0.2932
+-1.7482 WEATHER? -0.2604
+-1.2711 WHAT -0.2688
+
+\2-grams:
+-1.0000 <s> HELLO 0.0000
+-1.0000 <s> HEY 0.0000
+-0.5229 <s> WHAT 0.0000
+-0.3010 BOSTON? </s> -0.3010
+-0.3010 BUTLER </s> -0.3010
+-0.3010 HELLO BUTLER 0.0000
+-0.3010 HEY BUTLER 0.0000
+-0.3010 IN BOSTON? 0.0000
+-0.7782 IS IT? 0.0000
+-0.4771 IS THE 0.0000
+-0.3010 IT? </s> -0.3010
+-0.6021 THE WEATHER 0.0000
+-0.6021 THE WEATHER? 0.0000
+-0.3010 TIME IS -0.2218
+-0.3010 WEATHER IN 0.0000
+-0.3010 WEATHER? </s> -0.3010
+-0.4771 WHAT IS -0.1249
+-0.7782 WHAT TIME 0.0000
+
+\3-grams:
+-0.3010 <s> HELLO BUTLER
+-0.3010 <s> HEY BUTLER
+-0.4771 <s> WHAT IS
+-0.7782 <s> WHAT TIME
+-0.3010 HELLO BUTLER </s>
+-0.3010 HEY BUTLER </s>
+-0.3010 IN BOSTON? </s>
+-0.3010 IS IT? </s>
+-0.6021 IS THE WEATHER
+-0.6021 IS THE WEATHER?
+-0.3010 THE WEATHER IN
+-0.3010 THE WEATHER? </s>
+-0.3010 TIME IS IT?
+-0.3010 WEATHER IN BOSTON?
+-0.3010 WHAT IS THE
+-0.3010 WHAT TIME IS
+
+\end\

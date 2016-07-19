@@ -2,7 +2,6 @@ package com.nohowdezign.butler.modules;
 
 import com.nohowdezign.butler.intent.annotations.Intent;
 import com.nohowdezign.butler.modules.annotations.Initialize;
-import com.nohowdezign.butler.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +72,7 @@ public class ModuleLoader {
         Initialize initMethod = method.getAnnotation(Initialize.class);
         try {
             Class<?>[] methodParams = method.getParameterTypes();
-            method.invoke(handler.newInstance(), Constants.DEFAULT_RESPONDER);
+            method.invoke(handler.newInstance());
         } catch (Exception e) {
             e.printStackTrace();
         }

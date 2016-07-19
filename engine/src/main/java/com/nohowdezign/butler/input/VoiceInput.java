@@ -31,8 +31,8 @@ public class VoiceInput extends Input {
             Configuration configuration = new Configuration();
 
             configuration.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
-            configuration.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
-            configuration.setLanguageModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us.lm.bin");
+            configuration.setDictionaryPath("file:resources/models/6241.dic");
+            configuration.setLanguageModelPath("file:resources/models/6241.lm");
 
             LiveSpeechRecognizer recognizer = new LiveSpeechRecognizer(configuration);
             recognizer.startRecognition(true);
@@ -47,7 +47,7 @@ public class VoiceInput extends Input {
                     logger.info("Got input: " + input);
                     if(isActive) {
                         // Run module in new thread
-                        AbstractIntent intent = new IntentParser().parseIntentFromSentence(input);
+                        AbstractIntent intent = new IntentParser().parseIntentFromSentence(input.toLowerCase());
                         new Thread() {
                             @Override
                             public void run() {
@@ -57,10 +57,10 @@ public class VoiceInput extends Input {
                             }
                         }.start();
                         isActive = false;
-                    } else if (input.contains("butler")) {
+                    } else if (input.toLowerCase().contains("butler")) {
                         Constants.DEFAULT_RESPONDER.respondWithMessage("Yes?");
                         isActive = true;
-                    } else if (input.contains("goodbye")) {
+                    } else if (input.toLowerCase().contains("goodbye")) {
                         Constants.DEFAULT_RESPONDER.respondWithMessage("Goodbye, talk to you later.");
                         System.exit(1);
                     }
