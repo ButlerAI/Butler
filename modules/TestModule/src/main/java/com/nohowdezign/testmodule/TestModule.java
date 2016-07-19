@@ -11,7 +11,7 @@ public class TestModule {
 
     @Intent(keyword = "test")
     public void initTest(AbstractIntent intent, Responder responder) {
-        responder.respondWithMessage("testefst");
+        responder.respondWithMessage(intent.getIntentType());
     }
 
 }

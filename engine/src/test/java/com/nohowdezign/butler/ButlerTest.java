@@ -31,7 +31,7 @@ public class ButlerTest {
         partsOfSentence = languageProcessor.getPartOfSpeechFromSentence("What is the weather like?", "NN");
 
         for(String s : partsOfSentence.split(" ")) {
-            if(ModuleRegistry.getModuleClassForSubject(s) != null) {
+            if(ModuleRegistry.getModuleClassForIntent(s) != null) {
                 //TODO: Run the module first module that matches and throw some shit at the neural network
             }
         }

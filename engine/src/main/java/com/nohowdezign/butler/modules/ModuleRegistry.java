@@ -20,12 +20,12 @@ public class ModuleRegistry {
         return toReturn;
     }
 
-    public static Class getModuleClassForSubject(String subject) {
+    public static Class getModuleClassForIntent(String intent) {
         Class toReturn = null;
         for(HashMap<String, Class> map : moduleClasses) {
             System.out.println(map);
             for(String key : map.keySet()) {
-                if(key.toLowerCase().contains(subject)) {
+                if(key.toLowerCase().contains(intent)) {
                     for (Class c : map.values()) {
                         toReturn = c;
                     }
@@ -36,14 +36,12 @@ public class ModuleRegistry {
         return toReturn;
     }
 
-    public void addModuleClass(String subject, Class moduleClass) {
-        if(moduleClass.getAnnotation(ModuleLogic.class) != null) {
-            HashMap<String, Class> map = new HashMap<>();
-            for(String s : subject.split("\\s")) {
-                map.put(s, moduleClass);
-            }
-            moduleClasses.add(map); // Only add class to registry if it is a main class
+    public void addModuleClass(String intent, Class moduleClass) {
+        HashMap<String, Class> map = new HashMap<>();
+        for(String s : intent.split("\\s")) {
+            map.put(s, moduleClass);
         }
+        moduleClasses.add(map);
     }
 
     public void reset() {

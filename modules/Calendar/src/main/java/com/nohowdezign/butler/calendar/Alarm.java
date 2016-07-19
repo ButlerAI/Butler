@@ -2,6 +2,8 @@ package com.nohowdezign.butler.calendar;
 
 import com.nohowdezign.butler.database.Database;
 import com.nohowdezign.butler.database.UserProfile;
+import com.nohowdezign.butler.intent.AbstractIntent;
+import com.nohowdezign.butler.intent.annotations.Intent;
 import com.nohowdezign.butler.modules.annotations.Execute;
 import com.nohowdezign.butler.modules.annotations.Initialize;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
@@ -17,7 +19,6 @@ import java.util.List;
 /**
  * @author Noah Howard
  */
-@ModuleLogic(subjectWord = "alarm")
 public class Alarm {
     private List<String> alarms = new ArrayList<>();
     private Database database = new Database();
@@ -40,10 +41,10 @@ public class Alarm {
         }
     }
 
-    @Execute
-    public void setAlarm(String originalQuery, Responder responder) {
+    @Intent(keyword = "alarm")
+    public void setAlarm(AbstractIntent intent, Responder responder) {
         LanguageProcessor processor = new LanguageProcessor();
-        String time = processor.getNamedEntityValue(originalQuery, CoreAnnotations.TextAnnotation.class, "DATE");
+        String time = intent.getOptionalArguments().get("DATE");
 
         // Attempt to load in the time the user wakes up
         if(time.equals("")) {

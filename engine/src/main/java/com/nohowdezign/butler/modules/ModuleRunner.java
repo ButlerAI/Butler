@@ -1,5 +1,7 @@
 package com.nohowdezign.butler.modules;
 
+import com.nohowdezign.butler.intent.AbstractIntent;
+import com.nohowdezign.butler.intent.annotations.Intent;
 import com.nohowdezign.butler.modules.annotations.Execute;
 import com.nohowdezign.butler.utils.Constants;
 import org.slf4j.Logger;
@@ -13,42 +15,41 @@ import java.lang.reflect.Method;
 public class ModuleRunner {
     private Logger logger = LoggerFactory.getLogger(ModuleRunner.class);
 
-    public void runModuleForSubject(String subject, String originalQuery, ModuleLoader loader) {
-        Class c = ModuleRegistry.getModuleClassForSubject(subject);
+    public void runModuleForSubject(String subject, AbstractIntent intent, ModuleLoader loader) {
+        Class c = ModuleRegistry.getModuleClassForIntent(subject);
 
         if(c != null) {
             logger.debug(String.format("Found module %s for subject %s", c.getName(), subject));
-            runModule(c, originalQuery);
+            runModule(c, intent);
         } else {
             logger.debug("Running default response");
-            Constants.DEFAULT_RESPONDER.respondWithMessage("I do not understand " + originalQuery);
+            Constants.DEFAULT_RESPONDER.respondWithMessage("I do not understand what you mean.");
         }
     }
 
-    private void runModule(Class handler, String originalQuery) {
+    private void runModule(Class handler, AbstractIntent intent) {
         for(Method method : handler.getMethods()) {
             logger.debug("Found method " + method.getName());
-            findAndRunExecuteMethods(handler, method, originalQuery);
+            findAndRunExecuteMethods(handler, method, intent);
         }
     }
 
-    private void findAndRunExecuteMethods(Class<?> handler, Method method, String originalQuery) {
-        Execute executeMethod = method.getAnnotation(Execute.class);
-        if (executeMethod != null) {
+    private void findAndRunExecuteMethods(Class<?> handler, Method method, AbstractIntent intent) {
+        Intent intentMethod = method.getAnnotation(Intent.class);
+        if(intentMethod != null) {
             logger.debug("Execute method found: " + method.getName());
-            runExecuteMethod(method, handler, originalQuery);
+            runExecuteMethod(method, handler, intent);
         }
     }
 
-    private void runExecuteMethod(Method method, Class<?> handler, String originalQuery) {
+    private void runExecuteMethod(Method method, Class<?> handler, AbstractIntent intent) {
         try {
             Class<?>[] methodParams = method.getParameterTypes();
 
             if(methodParams.length < 2) {
-                logger.debug("This method does not need a query string, but it needs a responder.");
-                method.invoke(handler.newInstance(), Constants.DEFAULT_RESPONDER);
+                logger.error("This method does not have enough arguments.");
             } else {
-                method.invoke(handler.newInstance(), originalQuery, Constants.DEFAULT_RESPONDER);
+                method.invoke(handler.newInstance(), intent, Constants.DEFAULT_RESPONDER);
             }
         } catch (Exception e) {
             e.printStackTrace();

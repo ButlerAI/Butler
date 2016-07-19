@@ -1,5 +1,6 @@
 package com.nohowdezign.butler.input;
 
+import com.nohowdezign.butler.intent.IntentParser;
 import com.nohowdezign.butler.modules.ModuleLoader;
 import com.nohowdezign.butler.modules.ModuleRunner;
 import com.nohowdezign.butler.responder.VoiceResponder;
@@ -45,10 +46,11 @@ public class VoiceInput extends Input {
                     if(isActive) {
                         for (String s : processUserInput(input).split(" ")) {
                             // Run module in new thread
+                            final IntentParser intentParser = new IntentParser();
                             new Thread() {
                                 @Override
                                 public void run() {
-                                    moduleRunner.runModuleForSubject(s, input, loader);
+                                    moduleRunner.runModuleForSubject(s, intentParser.parseIntentFromSentence(input), loader);
                                 }
                             }.start();
                         }

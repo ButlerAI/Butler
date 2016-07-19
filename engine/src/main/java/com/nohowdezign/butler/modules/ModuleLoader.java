@@ -1,5 +1,6 @@
 package com.nohowdezign.butler.modules;
 
+import com.nohowdezign.butler.intent.annotations.Intent;
 import com.nohowdezign.butler.modules.annotations.Initialize;
 import com.nohowdezign.butler.modules.annotations.ModuleLogic;
 import com.nohowdezign.butler.utils.Constants;
@@ -59,22 +60,12 @@ public class ModuleLoader {
             logger.debug("Found class: " + className);
             className = className.replace('/', '.');
             Class c = cl.loadClass(className);
-            ModuleLogic logic = (ModuleLogic) c.getAnnotation(ModuleLogic.class);
-            try {
-                logger.debug("This is a logic class. " +
-                        "Trigger subject is " + logic.subjectWord() + ". Registering module");
-                registry.addModuleClass(logic.subjectWord(), c);
-                initializeModule(c);
-            } catch(NullPointerException exception) {
-                logger.debug("Annotation not found in class " + c.getName());
-            }
-        }
-    }
-
-    private void initializeModule(Class c) {
-        for(Method m : c.getMethods()) {
-            if(m.isAnnotationPresent(Initialize.class)) {
-                findAndRunInitializeMethods(c, m);
+            for(Method m : c.getMethods()) {
+                if(m.isAnnotationPresent(Initialize.class)) {
+                    findAndRunInitializeMethods(c, m);
+                } else if(m.isAnnotationPresent(Intent.class)) {
+                    registry.addModuleClass(m.getAnnotation(Intent.class).keyword(), c);
+                }
             }
         }
     }
@@ -87,10 +78,6 @@ public class ModuleLoader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public ModuleRegistry getRegistry() {
-        return registry;
     }
 
 }
