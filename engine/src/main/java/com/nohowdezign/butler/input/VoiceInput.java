@@ -1,7 +1,9 @@
 package com.nohowdezign.butler.input;
 
+import com.nohowdezign.butler.intent.AbstractIntent;
 import com.nohowdezign.butler.intent.IntentParser;
 import com.nohowdezign.butler.modules.ModuleLoader;
+import com.nohowdezign.butler.modules.ModuleRegistry;
 import com.nohowdezign.butler.modules.ModuleRunner;
 import com.nohowdezign.butler.responder.VoiceResponder;
 import com.nohowdezign.butler.utils.Constants;
@@ -44,16 +46,16 @@ public class VoiceInput extends Input {
                     input = result.getHypothesis(); // Set the input to the speech recognizer's hypothesis
                     logger.info("Got input: " + input);
                     if(isActive) {
-                        for (String s : processUserInput(input).split(" ")) {
-                            // Run module in new thread
-                            final IntentParser intentParser = new IntentParser();
-                            new Thread() {
-                                @Override
-                                public void run() {
-                                    moduleRunner.runModuleForSubject(s, intentParser.parseIntentFromSentence(input), loader);
+                        // Run module in new thread
+                        AbstractIntent intent = new IntentParser().parseIntentFromSentence(input);
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                if(ModuleRegistry.getModuleClassForIntent(intent.getIntentType()) != null) {
+                                    moduleRunner.runModuleForSubject(intent.getIntentType(), intent, loader);
                                 }
-                            }.start();
-                        }
+                            }
+                        }.start();
                         isActive = false;
                     } else if (input.contains("butler")) {
                         Constants.DEFAULT_RESPONDER.respondWithMessage("Yes?");
