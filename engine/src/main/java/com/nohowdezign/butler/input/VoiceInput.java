@@ -10,13 +10,18 @@ import com.nohowdezign.butler.utils.Constants;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import edu.cmu.sphinx.api.SpeechResult;
+import edu.cmu.sphinx.util.props.ConfigurationManager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * @author Noah Howard
  */
 public class VoiceInput extends Input {
+    private static ConfigurationManager cm;
     private ModuleLoader loader;
     private boolean isActive = false;
 
@@ -28,13 +33,7 @@ public class VoiceInput extends Input {
     @Override
     public void listenForInput() {
         try {
-            Configuration configuration = new Configuration();
-
-            //configuration.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
-            configuration.setAcousticModelPath("file:resources/cmusphinx-en-us-ptm-8khz-5.2");
-            configuration.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
-            configuration.setLanguageModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us.lm.bin");
-
+            Configuration configuration = createConfiguration();
             LiveSpeechRecognizer recognizer = new LiveSpeechRecognizer(configuration);
             recognizer.startRecognition(true);
             SpeechResult result;
@@ -60,13 +59,12 @@ public class VoiceInput extends Input {
                         isActive = false;
                     } else if (input.toLowerCase().contains("butler")) {
                         Constants.DEFAULT_RESPONDER.respondWithMessage("Yes?");
+                        //
                         isActive = true;
                     } else if (input.toLowerCase().contains("goodbye")) {
                         Constants.DEFAULT_RESPONDER.respondWithMessage("Goodbye, talk to you later.");
                         System.exit(1);
                     }
-                } else {
-                    logger.info("IM TALKING ASSCLOWN");
                 }
             }
             recognizer.stopRecognition();
@@ -75,8 +73,29 @@ public class VoiceInput extends Input {
         }
     }
 
+    public void addGrammar(File grammarFile) throws FileNotFoundException {
+        String grammarToAppend = "";
+        Scanner s = new Scanner(grammarFile);
+        while(s.hasNext()) {
+            grammarToAppend += s.next() + "\n";
+            System.out.println(grammarToAppend);
+        }
+        //
+    }
+
     @Override
     public String getNextInput() {
         return null;
+    }
+
+    private Configuration createConfiguration() {
+        Configuration configuration = new Configuration();
+        configuration.setAcousticModelPath("file:resources/cmusphinx-en-us-ptm-8khz-5.2");
+        configuration.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
+        configuration.setLanguageModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us.lm.bin");
+        configuration.setGrammarPath("resource:/grammar");
+        configuration.setGrammarName("butler");
+        configuration.setUseGrammar(true);
+        return configuration;
     }
 }

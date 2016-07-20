@@ -1,0 +1,5 @@
+#JSGF V1.0;
+
+grammar dialog;
+
+public <command> = (hey | hello | good morning | good afternoon | good evening) (butler);
