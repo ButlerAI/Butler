@@ -12,10 +12,7 @@ import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import edu.cmu.sphinx.api.SpeechResult;
 import edu.cmu.sphinx.util.props.ConfigurationManager;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * @author Noah Howard
@@ -73,16 +70,6 @@ public class VoiceInput extends Input {
         }
     }
 
-    public void addGrammar(File grammarFile) throws FileNotFoundException {
-        String grammarToAppend = "";
-        Scanner s = new Scanner(grammarFile);
-        while(s.hasNext()) {
-            grammarToAppend += s.next() + "\n";
-            System.out.println(grammarToAppend);
-        }
-        //
-    }
-
     @Override
     public String getNextInput() {
         return null;
@@ -93,8 +80,13 @@ public class VoiceInput extends Input {
         configuration.setAcousticModelPath("file:resources/cmusphinx-en-us-ptm-8khz-5.2");
         configuration.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
         configuration.setLanguageModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us.lm.bin");
-        configuration.setGrammarPath("resource:/grammar");
-        configuration.setGrammarName("butler");
+        if(Constants.GRAMMAR_FILE == null) {
+            configuration.setGrammarPath("resource:/grammar");
+            configuration.setGrammarName("butler");
+        } else {
+            configuration.setGrammarPath(String.valueOf(Constants.GRAMMAR_FILE.toURI()));
+            configuration.setGrammarName(Constants.GRAMMAR_FILE.getName().replace(".gram", ""));
+        }
         configuration.setUseGrammar(true);
         return configuration;
     }
