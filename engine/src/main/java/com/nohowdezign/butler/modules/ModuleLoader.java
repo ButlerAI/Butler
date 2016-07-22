@@ -55,14 +55,11 @@ public class ModuleLoader {
         URLClassLoader cl = URLClassLoader.newInstance(urls);
 
         List<File> grammarFiles = new ArrayList<>();
+        grammarFiles.add(new File("resource:/grammar/butler.gram"));
 
         while(e.hasMoreElements()) {
             JarEntry je = e.nextElement();
-            if(je.getName().endsWith(".gram")) {
-                InputStream input = jarFile.getInputStream(je);
-                File f = createGrammarForJarentry(input);
-                grammarFiles.add(f);
-            } else if(je.isDirectory() || !je.getName().endsWith(".class")){
+            if(je.isDirectory() || !je.getName().endsWith(".class")){
                 continue;
             }
 
@@ -79,6 +76,7 @@ public class ModuleLoader {
                 }
             }
         }
+        // TODO: FIX SOMETHING HERE BECAUSE THIS LINE IS CAUSING IT TO NOT LOAD LIKE ALL THE MODULES
         Constants.GRAMMAR_FILE = createGrammarFileForFiles(grammarFiles);
     }
 
