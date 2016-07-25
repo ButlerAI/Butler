@@ -2,4 +2,4 @@
 
 grammar dialog;
 
-public <command> = (hey | hello | good morning | good afternoon | good evening) (butler);
+public <command> = (hey | hello | good morning | good afternoon | good evening | goodbye) (butler);

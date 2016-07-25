@@ -1,5 +1,6 @@
 package com.nohowdezign.butler.input;
 
+import com.nohowdezign.butler.database.UserProfile;
 import com.nohowdezign.butler.intent.AbstractIntent;
 import com.nohowdezign.butler.intent.IntentParser;
 import com.nohowdezign.butler.modules.ModuleLoader;
@@ -45,22 +46,20 @@ public class VoiceInput extends Input {
                     if(isActive) {
                         // Run module in new thread
                         AbstractIntent intent = new IntentParser().parseIntentFromSentence(input.toLowerCase());
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                if(ModuleRegistry.getModuleClassForIntent(intent.getIntentType()) != null) {
-                                    moduleRunner.runModuleForSubject(intent.getIntentType(), intent, loader);
-                                }
-                            }
-                        }.start();
+                        if(ModuleRegistry.getModuleClassForIntent(intent.getIntentType()) != null) {
+                            recognizer.stopRecognition();
+                            moduleRunner.runModuleForSubject(intent.getIntentType(), intent, loader);
+                            recognizer.startRecognition(true);
+                        }
                         isActive = false;
-                    } else if (input.toLowerCase().contains("butler")) {
-                        Constants.DEFAULT_RESPONDER.respondWithMessage("Yes?");
-                        //
-                        isActive = true;
-                    } else if (input.toLowerCase().contains("goodbye")) {
-                        Constants.DEFAULT_RESPONDER.respondWithMessage("Goodbye, talk to you later.");
+                    } else if(input.toLowerCase().contains("bye")) {
+                        Constants.DEFAULT_RESPONDER.respondWithMessage(String.format("Goodbye, talk to you later %s.", UserProfile.DEFAULT_USER));
                         System.exit(1);
+                    } else if(input.toLowerCase().contains("butler")) {
+                        recognizer.stopRecognition();
+                        Constants.DEFAULT_RESPONDER.respondWithMessage("Sir?");
+                        isActive = true;
+                        recognizer.startRecognition(true);
                     }
                 }
             }

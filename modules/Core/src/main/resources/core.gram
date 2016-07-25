@@ -1,0 +1,12 @@
+public <name> = (set my name to) (<names>);
+<names> =
+noah|
+elizabeth|
+sir;
+
+
+public <weather> = (what is the) (weather | temperature) (like) (in) (<location>);
+<location> =
+boston|
+portland|
+bangor;

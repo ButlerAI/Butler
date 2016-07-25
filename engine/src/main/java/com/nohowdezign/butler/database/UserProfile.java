@@ -27,7 +27,7 @@ public class UserProfile {
         ResultSet users = db.executeQuery("SELECT * FROM users");
         if(users != null) {
             try {
-                while (users.next()) {
+                while(users.next()) {
                     DEFAULT_USER = users.getString("name");
                     this.users.add(DEFAULT_USER);
                 }
@@ -72,7 +72,19 @@ public class UserProfile {
     public String getAttributeFromProfile(String columnName, String attributeType, String attributeValue) {
         String toReturn = "";
         ResultSet set = db.executeQuery(String.format("SELECT * FROM users where %s = '%s'",
-                columnName, attributeType, attributeValue));
+                columnName, attributeValue));
+        try {
+            toReturn = set.getString(columnName);
+        } catch (SQLException e) {
+            logger.debug(e.getLocalizedMessage());
+        }
+        return toReturn;
+    }
+
+    public String setAttributeOnProfile(String columnName, String oldAttributeValue, String newAttributeValue) {
+        String toReturn = "";
+        ResultSet set = db.executeQuery(String.format("UPDATE users SET %s = '%s' WHERE %s = '%s'",
+                columnName, newAttributeValue, columnName, oldAttributeValue));
         try {
             toReturn = set.getString(columnName);
         } catch (SQLException e) {

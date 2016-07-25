@@ -1,5 +1,6 @@
 package com.nohowdezign.butler.calendar;
 
+import com.nohowdezign.butler.calendar.chronos.Chronos;
 import com.nohowdezign.butler.database.Database;
 import com.nohowdezign.butler.database.UserProfile;
 import com.nohowdezign.butler.intent.AbstractIntent;
@@ -7,9 +8,7 @@ import com.nohowdezign.butler.intent.annotations.Intent;
 import com.nohowdezign.butler.modules.annotations.Initialize;
 import com.nohowdezign.butler.responder.Responder;
 import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.*;
-import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.time.TimeAnnotations;
 import edu.stanford.nlp.time.TimeAnnotator;
 import edu.stanford.nlp.time.TimeExpression;
@@ -28,6 +27,7 @@ import java.util.Properties;
 public class Alarm {
     private List<String> alarms = new ArrayList<>();
     private Database database = new Database();
+    private Chronos chronos = new Chronos();
 
     @Initialize
     public void init() {
@@ -38,9 +38,11 @@ public class Alarm {
         if(database.doesColumnExist("alarms", "time")) {
             ResultSet set = database.executeQuery("SELECT * FROM alarms;");
             try {
-                while (set.next()) {
+                while(set.next()) {
                     if(set.getInt("enabled") == 1) {
+                        chronos.createAlarm(set.getString("time"));
                         alarms.add(set.getString("time"));
+                        System.out.println(alarms);
                     }
                 }
             } catch(SQLException e) {
@@ -52,7 +54,7 @@ public class Alarm {
     @Intent(keyword = "alarm")
     public void setAlarm(AbstractIntent intent, Responder responder) {
         LocalDateTime ldt = LocalDateTime.now();
-        String time = parseTimeFromSentence(intent.getOptionalArguments().get("DATE"),
+        String time = parseTimeFromSentence(intent.getOptionalArguments().get("TIME"),
                 ldt.getYear() + "-" + ldt.getMonth().getValue() + "-" + ldt.getDayOfMonth());
 
         // Attempt to load in the time the user wakes up
@@ -63,10 +65,18 @@ public class Alarm {
             }
         }
 
-        database.executeQuery(String.format("INSERT INTO alarms (name, time) VALUES ('%s', '%s')",
-                UserProfile.DEFAULT_USER, time));
+        if(time == null) {
+            // Time is STILL null... we gotta stop this train before it crashes
+            responder.respondWithMessage("I couldn't hear you say a time, I'm sorry.");
+        } else if(chronos.hasTimerAlreadyPassed(chronos.getDateTimeFromString(time))) {
+            responder.respondWithMessage("The time you are trying to create an alarm for has already passed.");
+        } else {
+            database.executeQuery(String.format("INSERT INTO alarms (name, time) VALUES ('%s', '%s')",
+                    UserProfile.DEFAULT_USER, time));
 
-        responder.respondWithMessage("I have set an alarm for " + time);
+            chronos.createAlarm(time);
+            responder.respondWithMessage("I have set an alarm for " + intent.getOptionalArguments().get("TIME"));
+        }
     }
 
     private String parseTimeFromSentence(String sentence, String date) {
@@ -78,11 +88,14 @@ public class Alarm {
         pipeline.addAnnotator(new POSTaggerAnnotator(false));
         pipeline.addAnnotator(new TimeAnnotator("sutime", props));
         Annotation annotation = new Annotation(sentence);
+        // Set the current date so that the document has a frame of reference
         annotation.set(CoreAnnotations.DocDateAnnotation.class, date);
         pipeline.annotate(annotation);
-        List<CoreMap> timexAnnsAll = annotation.get(TimeAnnotations.TimexAnnotations.class);
-        for (CoreMap cm : timexAnnsAll) {
-            toReturn = cm.get(TimeExpression.Annotation.class).getTemporal().toString();
+        if(annotation.get(TimeAnnotations.TimexAnnotations.class) != null) {
+            List<CoreMap> timexAnnsAll = annotation.get(TimeAnnotations.TimexAnnotations.class);
+            for (CoreMap cm : timexAnnsAll) {
+                toReturn = cm.get(TimeExpression.Annotation.class).getTemporal().toString();
+            }
         }
         return toReturn;
     }

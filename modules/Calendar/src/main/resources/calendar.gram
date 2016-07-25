@@ -38,4 +38,4 @@ thirty five|
 forty|
 forty five;
 
-public <alarm> = (set | create) (an alarm for) (<times>);
+public <alarm> = (set | create) (an alarm for) (<times>) (am | pm);
