@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
@@ -26,32 +27,37 @@ import java.util.jar.JarFile;
 public class ModuleLoader {
     private Logger logger = LoggerFactory.getLogger(ModuleLoader.class);
     private ModuleRegistry registry = new ModuleRegistry();
+    private List<File> grammarFiles = new ArrayList<>();
+
+    public ModuleLoader() {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        try {
+            grammarFiles.add(new File(classloader.getResource("grammar/butler.gram").toURI()));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void loadModulesFromDirectory(String directoryName) throws
             IOException, ClassNotFoundException {
         File moduleDirectory = new File(directoryName);
 
-        List<File> grammarFiles = new ArrayList<>();
-        //grammarFiles.add(new File("resource:grammar/butler.gram"));
-
         if(moduleDirectory.listFiles() != null) {
             for(File plugin : moduleDirectory.listFiles()) {
-                System.out.println(plugin.getAbsolutePath());
                 if(plugin.exists() && !plugin.isDirectory()) {
                     if(plugin.getName().endsWith(".jar")) {
                         logger.info("Loading plugin: " + plugin.getName());
-                        loadModuleByJarname(plugin.getAbsolutePath(), grammarFiles);
+                        loadModuleByJarname(plugin.getAbsolutePath());
                     } // TODO: Implement loading compiled .class files instead of just .jar's
                 } else if(plugin.isDirectory()) {
                     logger.debug("Found directory, doing recursive scan");
                     loadModulesFromDirectory(plugin.getAbsolutePath());
                 }
             }
-            Constants.GRAMMAR_FILE = createGrammarFileForFiles(grammarFiles);
         }
     }
 
-    private void loadModuleByJarname(String filename, List<File> grammarFiles) throws IOException, ClassNotFoundException {
+    private void loadModuleByJarname(String filename) throws IOException, ClassNotFoundException {
         logger.debug("Processing classes");
         JarFile jarFile = new JarFile(filename);
         Enumeration<JarEntry> e = jarFile.entries();
@@ -61,7 +67,6 @@ public class ModuleLoader {
 
         while(e.hasMoreElements()) {
             JarEntry je = e.nextElement();
-            System.out.println(je.getName());
             if(je.getName().endsWith(".gram")) {
                 InputStream input = jarFile.getInputStream(je);
                 File f = createGrammarForJarentry(input);
@@ -69,7 +74,6 @@ public class ModuleLoader {
                 continue;
             }
             if(je.isDirectory() || !je.getName().endsWith(".class")){
-                System.out.println("Not a class");
                 continue;
             }
 
@@ -102,19 +106,22 @@ public class ModuleLoader {
         return tempFile;
     }
 
-    private File createGrammarFileForFiles(List<File> grammarFiles) throws IOException {
-        List<String> grammarToAppend = new ArrayList<>();
+    public File createGrammarFileForFiles(List<File> grammarFiles) throws IOException {
+        // Create temporary grammar file and write to it
+        File tempFile = File.createTempFile("grammar", ".gram");
+        FileOutputStream fos = new FileOutputStream(tempFile);
+
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+
         for(File f : grammarFiles) {
             Scanner s = new Scanner(f);
-            while (s.hasNext()) {
-                grammarToAppend.add(s.next());
-                System.out.println(grammarToAppend);
+            while (s.hasNextLine()) {
+                bw.write(s.nextLine());
+                bw.newLine();
             }
         }
 
-        // Create temporary grammar file and write to it
-        File tempFile = File.createTempFile("grammar", ".gram");
-        Files.write(Paths.get(tempFile.toURI()), grammarToAppend, Charset.forName("UTF-8"));
+        bw.close();
         return tempFile;
     }
 
@@ -126,6 +133,10 @@ public class ModuleLoader {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<File> getGrammarFiles() {
+        return this.grammarFiles;
     }
 
 }

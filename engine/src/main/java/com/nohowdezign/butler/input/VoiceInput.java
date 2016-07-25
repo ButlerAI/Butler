@@ -84,8 +84,7 @@ public class VoiceInput extends Input {
             configuration.setGrammarPath("resource:/grammar");
             configuration.setGrammarName("butler");
         } else {
-            System.out.println(Constants.GRAMMAR_FILE.getAbsolutePath());
-            configuration.setGrammarPath(String.valueOf(Constants.GRAMMAR_FILE.getParent()));
+            configuration.setGrammarPath("file:/" + String.valueOf(Constants.GRAMMAR_FILE.getParent()) + "/");
             configuration.setGrammarName(Constants.GRAMMAR_FILE.getName().replace(".gram", ""));
         }
         configuration.setUseGrammar(true);

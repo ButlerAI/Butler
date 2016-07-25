@@ -26,6 +26,7 @@ public class Butler {
         try {
             logger.info("Loading modules...");
             moduleLoader.loadModulesFromDirectory("./modules");
+            Constants.GRAMMAR_FILE = moduleLoader.createGrammarFileForFiles(moduleLoader.getGrammarFiles());
             logger.info("Modules loaded.");
         } catch (IOException | ClassNotFoundException e) {
             logger.debug(e.getLocalizedMessage());
