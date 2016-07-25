@@ -1,9 +1,7 @@
 public <time> = (what time is it | what is the time);
 
-public <times> = (<numbers>) [second|seconds|minute|minutes|hour|hours|day|days|o'clock];
+public <times> = (<numbers>) [colon] [<numbers>] [<numbers>] [second|seconds|minute|minutes|hour|hours|day|days|o'clock];
 <numbers> =
-point|
-colon|
 the first|
 the second|
 the third|

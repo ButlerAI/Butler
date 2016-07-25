@@ -17,9 +17,7 @@ import edu.stanford.nlp.util.CoreMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author Noah Howard
@@ -28,6 +26,39 @@ public class Alarm {
     private List<String> alarms = new ArrayList<>();
     private Database database = new Database();
     private Chronos chronos = new Chronos();
+
+    private static final Map<String, Integer> DIGITS =
+            new HashMap<String, Integer>();
+
+    static {
+        DIGITS.put("oh", 0);
+        DIGITS.put("zero", 0);
+        DIGITS.put("one", 1);
+        DIGITS.put("two", 2);
+        DIGITS.put("three", 3);
+        DIGITS.put("four", 4);
+        DIGITS.put("five", 5);
+        DIGITS.put("six", 6);
+        DIGITS.put("seven", 7);
+        DIGITS.put("eight", 8);
+        DIGITS.put("nine", 9);
+        DIGITS.put("ten", 10);
+        DIGITS.put("eleven", 11);
+        DIGITS.put("twelve", 12);
+    }
+
+    private static String parseNumber(String[] tokens) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 1; i < tokens.length; ++i) {
+            if (tokens[i].equals("colon"))
+                sb.append(":");
+            else
+                sb.append(DIGITS.get(tokens[i]));
+        }
+
+        return sb.toString();
+    }
 
     @Initialize
     public void init() {
@@ -57,7 +88,7 @@ public class Alarm {
     @Intent(keyword = "alarm")
     public void setAlarm(AbstractIntent intent, Responder responder) {
         LocalDateTime ldt = LocalDateTime.now();
-        String time = parseTimeFromSentence(intent.getOptionalArguments().get("TIME"),
+        String time = parseTimeFromSentence(parseNumber(intent.getOptionalArguments().get("TIME").split(" ")),
                 ldt.getYear() + "-" + ldt.getMonth().getValue() + "-" + ldt.getDayOfMonth());
 
         // Attempt to load in the time the user wakes up
