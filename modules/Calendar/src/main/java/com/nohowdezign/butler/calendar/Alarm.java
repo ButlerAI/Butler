@@ -31,14 +31,17 @@ public class Alarm {
 
     @Initialize
     public void init() {
+        System.out.println("init alarm");
         database.executeQuery("CREATE TABLE IF NOT EXISTS" +
                 " alarms (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " name VARCHAR NOT NULL, time VARCHAR, enabled INTEGER);");
 
         if(database.doesColumnExist("alarms", "time")) {
+            System.out.println("Alarm database exists.");
             ResultSet set = database.executeQuery("SELECT * FROM alarms;");
             try {
                 while(set.next()) {
+                    System.out.println("Found alarm, checking it");
                     if(set.getInt("enabled") == 1) {
                         chronos.createAlarm(set.getString("time"));
                         alarms.add(set.getString("time"));

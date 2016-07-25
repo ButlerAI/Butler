@@ -42,8 +42,8 @@ public class Database {
     public boolean doesColumnExist(String table, String columnName) {
         ResultSet set = executeQuery(String.format("PRAGMA TABLE_INFO (%s);", table));
         try {
-            while (set.next()) {
-                if (set.getString("name") == columnName) {
+            while(set.next()) {
+                if(set.getString("name").equals(columnName)) {
                     return true;
                 }
             }

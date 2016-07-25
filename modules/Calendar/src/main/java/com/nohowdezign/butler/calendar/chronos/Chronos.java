@@ -15,8 +15,8 @@ public class Chronos {
         long timeUntilAlarm = zdt.toInstant().toEpochMilli() - System.currentTimeMillis();
         if(!hasTimerAlreadyPassed(zdt)) {
             Timer t = new Timer();
-            AlarmTask mTask = new AlarmTask();
-            t.scheduleAtFixedRate(mTask, 0, timeUntilAlarm);
+            AlarmTask mTask = new AlarmTask(zdt);
+            t.schedule(mTask, timeUntilAlarm);
         }
     }
 

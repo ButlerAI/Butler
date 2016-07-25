@@ -1,8 +1,9 @@
 package com.nohowdezign.butler.modules;
 
+import com.nohowdezign.butler.eventsystem.EventRegistry;
+import com.nohowdezign.butler.eventsystem.annotations.ReceiveEvent;
 import com.nohowdezign.butler.intent.annotations.Intent;
 import com.nohowdezign.butler.modules.annotations.Initialize;
-import com.nohowdezign.butler.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,6 +88,8 @@ public class ModuleLoader {
                     findAndRunInitializeMethods(c, m);
                 } else if(m.isAnnotationPresent(Intent.class)) {
                     registry.addModuleClass(m.getAnnotation(Intent.class).keyword(), c);
+                } else if(m.isAnnotationPresent(ReceiveEvent.class)) {
+                    EventRegistry.register(c);
                 }
             }
         }
