@@ -31,22 +31,27 @@ public class ModuleLoader {
             IOException, ClassNotFoundException {
         File moduleDirectory = new File(directoryName);
 
+        List<File> grammarFiles = new ArrayList<>();
+        //grammarFiles.add(new File("resource:grammar/butler.gram"));
+
         if(moduleDirectory.listFiles() != null) {
             for(File plugin : moduleDirectory.listFiles()) {
+                System.out.println(plugin.getAbsolutePath());
                 if(plugin.exists() && !plugin.isDirectory()) {
                     if(plugin.getName().endsWith(".jar")) {
                         logger.info("Loading plugin: " + plugin.getName());
-                        loadModuleByJarname(plugin.getAbsolutePath());
+                        loadModuleByJarname(plugin.getAbsolutePath(), grammarFiles);
                     } // TODO: Implement loading compiled .class files instead of just .jar's
                 } else if(plugin.isDirectory()) {
                     logger.debug("Found directory, doing recursive scan");
                     loadModulesFromDirectory(plugin.getAbsolutePath());
                 }
             }
+            Constants.GRAMMAR_FILE = createGrammarFileForFiles(grammarFiles);
         }
     }
 
-    private void loadModuleByJarname(String filename) throws IOException, ClassNotFoundException {
+    private void loadModuleByJarname(String filename, List<File> grammarFiles) throws IOException, ClassNotFoundException {
         logger.debug("Processing classes");
         JarFile jarFile = new JarFile(filename);
         Enumeration<JarEntry> e = jarFile.entries();
@@ -54,12 +59,17 @@ public class ModuleLoader {
         URL[] urls = { new URL("jar:file:" + filename + "!/") };
         URLClassLoader cl = URLClassLoader.newInstance(urls);
 
-        List<File> grammarFiles = new ArrayList<>();
-        grammarFiles.add(new File("resource:/grammar/butler.gram"));
-
         while(e.hasMoreElements()) {
             JarEntry je = e.nextElement();
+            System.out.println(je.getName());
+            if(je.getName().endsWith(".gram")) {
+                InputStream input = jarFile.getInputStream(je);
+                File f = createGrammarForJarentry(input);
+                grammarFiles.add(f);
+                continue;
+            }
             if(je.isDirectory() || !je.getName().endsWith(".class")){
+                System.out.println("Not a class");
                 continue;
             }
 
@@ -76,8 +86,6 @@ public class ModuleLoader {
                 }
             }
         }
-        // TODO: FIX SOMETHING HERE BECAUSE THIS LINE IS CAUSING IT TO NOT LOAD LIKE ALL THE MODULES
-        Constants.GRAMMAR_FILE = createGrammarFileForFiles(grammarFiles);
     }
 
     private File createGrammarForJarentry(InputStream input) throws IOException {
@@ -94,7 +102,7 @@ public class ModuleLoader {
         return tempFile;
     }
 
-    public File createGrammarFileForFiles(List<File> grammarFiles) throws IOException {
+    private File createGrammarFileForFiles(List<File> grammarFiles) throws IOException {
         List<String> grammarToAppend = new ArrayList<>();
         for(File f : grammarFiles) {
             Scanner s = new Scanner(f);
