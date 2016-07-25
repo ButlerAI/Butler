@@ -29,7 +29,7 @@ public class Butler {
             Constants.GRAMMAR_FILE = moduleLoader.createGrammarFileForFiles(moduleLoader.getGrammarFiles());
             logger.info("Modules loaded.");
         } catch (IOException | ClassNotFoundException e) {
-            logger.debug(e.getLocalizedMessage());
+            e.printStackTrace();
         }
         logger.debug(String.format("Loaded modules: %s", ModuleRegistry.getModuleClasses()));
 

@@ -11,13 +11,11 @@ dependencies {
     compile project(':engine')
     // OpenWeatherMap Client and dependencies
     compile 'net.aksingh:owm-japis:2.5.0.3'
-    compile group: 'org.json', name: 'json', version: '20140107'
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
 
     releaseJars 'net.aksingh:owm-japis:2.5.0.3'
-    releaseJars group: 'org.json', name: 'json', version: '20140107'
 
     releaseJars group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
     releaseJars group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
