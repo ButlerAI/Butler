@@ -118,8 +118,6 @@ public class Alarm {
         Properties props = new Properties();
         AnnotationPipeline pipeline = new AnnotationPipeline();
         pipeline.addAnnotator(new TokenizerAnnotator(false));
-        pipeline.addAnnotator(new WordsToSentencesAnnotator(false));
-        pipeline.addAnnotator(new POSTaggerAnnotator(false));
         pipeline.addAnnotator(new TimeAnnotator("sutime", props));
         Annotation annotation = new Annotation(sentence);
         // Set the current date so that the document has a frame of reference
