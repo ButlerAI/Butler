@@ -1,4 +1,4 @@
-package com.nohowdezign.butler.calendar;
+package com.nohowdezign.butler.calendar.alarm;
 
 import com.nohowdezign.butler.calendar.events.AlarmEvent;
 import com.nohowdezign.butler.eventsystem.annotations.ReceiveEvent;

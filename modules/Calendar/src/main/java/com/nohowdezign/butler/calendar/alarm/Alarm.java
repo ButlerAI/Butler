@@ -1,4 +1,4 @@
-package com.nohowdezign.butler.calendar;
+package com.nohowdezign.butler.calendar.alarm;
 
 import com.nohowdezign.butler.calendar.chronos.Chronos;
 import com.nohowdezign.butler.database.Database;
@@ -65,7 +65,7 @@ public class Alarm {
         System.out.println("init alarm");
         database.executeQuery("CREATE TABLE IF NOT EXISTS" +
                 " alarms (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " name VARCHAR NOT NULL, time VARCHAR, enabled INTEGER);");
+                " name VARCHAR NOT NULL, time VARCHAR, type VARCHAR, enabled INTEGER);");
 
         if(database.doesColumnExist("alarms", "time")) {
             System.out.println("Alarm database exists.");
@@ -74,7 +74,7 @@ public class Alarm {
                 while(set.next()) {
                     System.out.println("Found alarm, checking it");
                     if(set.getInt("enabled") == 1) {
-                        chronos.createAlarm(set.getString("time"));
+                        chronos.createAlarm(set.getInt("id"), set.getString("time"), set.getString("type"));
                         alarms.add(set.getString("time"));
                         System.out.println(alarms);
                     }
@@ -87,9 +87,18 @@ public class Alarm {
 
     @Intent(keyword = "alarm")
     public void setAlarm(AbstractIntent intent, Responder responder) {
+        String alarmType = "once";
         LocalDateTime ldt = LocalDateTime.now();
-        String time = parseTimeFromSentence(parseNumber(intent.getOptionalArguments().get("TIME").split(" ")),
-                ldt.getYear() + "-" + ldt.getMonth().getValue() + "-" + ldt.getDayOfMonth());
+
+        String time = null;
+        if(intent.getOptionalArguments().get("TIME") != null) {
+            time = parseTimeFromSentence(intent.getOptionalArguments().get("TIME"),
+                    ldt.getYear() + "-" + ldt.getMonth().getValue() + "-" + ldt.getDayOfMonth());
+        } else if(intent.getOptionalArguments().get("DATE") != null) {
+            String timeToParse = intent.getOptionalArguments().get("DATE").replaceAll("WXX-1", "");
+            time = parseTimeFromSentence(timeToParse,
+                    ldt.getYear() + "-" + ldt.getMonth().getValue() + "-" + ldt.getDayOfMonth());
+        }
 
         // Attempt to load in the time the user wakes up
         if(time == null) {
@@ -99,16 +108,29 @@ public class Alarm {
             }
         }
 
+        System.out.println(time);
+
+        if(intent.getOptionalArguments().get("SET") != null) {
+            // It's a weekly alarm
+            alarmType = "multiple";
+        }
+
         if(time == null) {
             // Time is STILL null... we gotta stop this train before it crashes
             responder.respondWithMessage("I couldn't hear you say a time, I'm sorry.");
         } else if(chronos.hasTimerAlreadyPassed(chronos.getDateTimeFromString(time))) {
             responder.respondWithMessage("The time you are trying to create an alarm for has already passed.");
         } else {
-            database.executeQuery(String.format("INSERT INTO alarms (name, time) VALUES ('%s', '%s')",
-                    UserProfile.DEFAULT_USER, time));
+            database.executeQuery(String.format("INSERT INTO alarms (name, time, type, enabled) VALUES ('%s', '%s', '%s', 1)",
+                    UserProfile.DEFAULT_USER, time, alarmType));
+            try {
+                ResultSet set = database.executeQuery(String.format("SELECT * FROM alarms WHERE time = '%s' AND type = '%s';",
+                        time, alarmType));
+                chronos.createAlarm(set.getInt("id"), time, alarmType);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
-            chronos.createAlarm(time);
             responder.respondWithMessage("I have set an alarm for " + intent.getOptionalArguments().get("TIME"));
         }
     }

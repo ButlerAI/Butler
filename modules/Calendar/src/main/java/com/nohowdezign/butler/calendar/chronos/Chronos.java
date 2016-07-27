@@ -10,12 +10,12 @@ import java.util.Timer;
  */
 public class Chronos {
 
-    public void createAlarm(String alarmTime) {
+    public void createAlarm(int id, String alarmTime, String alarmType) {
         ZonedDateTime zdt = getDateTimeFromString(alarmTime);
         long timeUntilAlarm = zdt.toInstant().toEpochMilli() - System.currentTimeMillis();
         if(!hasTimerAlreadyPassed(zdt)) {
             Timer t = new Timer();
-            AlarmTask mTask = new AlarmTask(zdt);
+            AlarmTask mTask = new AlarmTask(id, zdt, alarmType);
             t.schedule(mTask, timeUntilAlarm);
         }
     }
