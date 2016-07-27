@@ -91,14 +91,16 @@ public class Alarm {
         LocalDateTime ldt = LocalDateTime.now();
 
         String time = null;
+        String timeToParse = "";
+
         if(intent.getOptionalArguments().get("TIME") != null) {
-            time = parseTimeFromSentence(intent.getOptionalArguments().get("TIME"),
-                    ldt.getYear() + "-" + ldt.getMonth().getValue() + "-" + ldt.getDayOfMonth());
-        } else if(intent.getOptionalArguments().get("DATE") != null) {
-            String timeToParse = intent.getOptionalArguments().get("DATE").replaceAll("WXX-1", "");
-            time = parseTimeFromSentence(timeToParse,
-                    ldt.getYear() + "-" + ldt.getMonth().getValue() + "-" + ldt.getDayOfMonth());
+            timeToParse += intent.getOptionalArguments().get("TIME");
         }
+        if(intent.getOptionalArguments().get("DATE") != null) {
+            timeToParse += intent.getOptionalArguments().get("DATE");
+        }
+        time = parseTimeFromSentence(timeToParse,
+                ldt.getYear() + "-" + ldt.getMonth().getValue() + "-" + ldt.getDayOfMonth());
 
         // Attempt to load in the time the user wakes up
         if(time == null) {
