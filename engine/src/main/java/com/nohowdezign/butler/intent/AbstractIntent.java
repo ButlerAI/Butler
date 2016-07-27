@@ -7,6 +7,7 @@ import java.util.Map;
  * @author Noah Howard
  */
 public class AbstractIntent {
+    private String originalSentence = "";
     private String intentType = "";
     private Map<String, String> optionalArguments = new HashMap<String, String>();
 
@@ -24,5 +25,13 @@ public class AbstractIntent {
 
     public Map<String, String> getOptionalArguments() {
         return optionalArguments;
+    }
+
+    public String getOriginalSentence() {
+        return originalSentence;
+    }
+
+    public void setOriginalSentence(String originalSentence) {
+        this.originalSentence = originalSentence;
     }
 }

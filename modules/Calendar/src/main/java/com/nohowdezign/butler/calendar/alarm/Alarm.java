@@ -89,17 +89,8 @@ public class Alarm {
     public void setAlarm(AbstractIntent intent, Responder responder) {
         String alarmType = "once";
         LocalDateTime ldt = LocalDateTime.now();
-
-        String time = null;
-        String timeToParse = "";
-
-        if(intent.getOptionalArguments().get("TIME") != null) {
-            timeToParse += intent.getOptionalArguments().get("TIME");
-        }
-        if(intent.getOptionalArguments().get("DATE") != null) {
-            timeToParse += intent.getOptionalArguments().get("DATE");
-        }
-        time = parseTimeFromSentence(timeToParse,
+        String time;
+        time = parseTimeFromSentence(intent.getOriginalSentence(),
                 ldt.getYear() + "-" + ldt.getMonth().getValue() + "-" + ldt.getDayOfMonth());
 
         // Attempt to load in the time the user wakes up
@@ -110,11 +101,13 @@ public class Alarm {
             }
         }
 
-        System.out.println(time);
-
         if(intent.getOptionalArguments().get("SET") != null) {
             // It's a weekly alarm
-            alarmType = "multiple";
+            if(intent.getOptionalArguments().get("SET").equals("weekly")) {
+                alarmType = "weekly";
+            } else if(intent.getOptionalArguments().get("SET").contains("day")) {
+                alarmType = "daily";
+            }
         }
 
         if(time == null) {

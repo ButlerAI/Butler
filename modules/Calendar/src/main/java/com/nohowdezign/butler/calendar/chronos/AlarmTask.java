@@ -28,9 +28,13 @@ public class AlarmTask extends TimerTask {
         DispatchEvent.raiseEvent(new AlarmEvent(alarmTime));
         if(alarmType.equals("once")) {
             database.executeQuery("UPDATE alarms SET enabled = 0 WHERE id = " + this.id);
-        } else {
+        } else if(alarmType.equals("weekly")) {
             // Add one week to alarm and put it back in the database
             ZonedDateTime newTime = alarmTime.plusDays(7);
+            database.executeQuery(String.format("UPDATE alarms SET time = '%s' WHERE id = %s", newTime.toString(), id));
+        } else if(alarmType.equals("daily")) {
+            // Add one day to alarm and put it back in the database
+            ZonedDateTime newTime = alarmTime.plusDays(1);
             database.executeQuery(String.format("UPDATE alarms SET time = '%s' WHERE id = %s", newTime.toString(), id));
         }
     }

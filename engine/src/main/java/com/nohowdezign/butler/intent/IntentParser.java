@@ -13,6 +13,7 @@ public class IntentParser {
 
     public AbstractIntent parseIntentFromSentence(String sentence) {
         AbstractIntent abstractIntent = new AbstractIntent();
+        abstractIntent.setOriginalSentence(sentence);
         Sentence sentence1 = new Sentence(sentence);
         processSentence(abstractIntent, sentence1);
         processSentenceExtras(abstractIntent, sentence1);
