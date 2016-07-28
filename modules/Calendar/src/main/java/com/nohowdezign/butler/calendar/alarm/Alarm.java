@@ -17,6 +17,7 @@ import edu.stanford.nlp.util.CoreMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 /**
@@ -27,8 +28,8 @@ public class Alarm {
     private Database database = new Database();
     private Chronos chronos = new Chronos();
 
-    private static final Map<String, Integer> DIGITS =
-            new HashMap<String, Integer>();
+    private static final Map<String, Integer> DIGITS = new HashMap<String, Integer>();
+    private static final Map<String, Integer> specialDigits = new HashMap<String, Integer>();
 
     static {
         DIGITS.put("oh", 0);
@@ -45,38 +46,51 @@ public class Alarm {
         DIGITS.put("ten", 10);
         DIGITS.put("eleven", 11);
         DIGITS.put("twelve", 12);
+        DIGITS.put("o'clock", 00);
+        specialDigits.put("twenty", 20);
+        specialDigits.put("thirty", 30);
+        specialDigits.put("forty", 40);
+        specialDigits.put("fifty", 50);
     }
 
     private static String parseNumber(String[] tokens) {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 1; i < tokens.length; ++i) {
-            if (tokens[i].equals("colon"))
+            if(tokens[i].equals("colon")) {
                 sb.append(":");
-            else
-                sb.append(DIGITS.get(tokens[i]));
+            } else if(DIGITS.get(tokens[i]) != null || specialDigits.get(tokens[i]) != null) {
+                if(specialDigits.get(tokens[i]) != null && DIGITS.get(tokens[i + 1]) != null) {
+                    // Divide value by 10 to remove the zero, since there is a number following the special digit (i.e.
+                    // thirty eight)
+                    sb.append(specialDigits.get(tokens[i]) / 10);
+                } else if(specialDigits.get(tokens[i]) != null) {
+                    sb.append(specialDigits.get(tokens[i]));
+                } else {
+                    sb.append(DIGITS.get(tokens[i]));
+                }
+            } else {
+                sb.append(tokens[i] + " ");
+            }
         }
 
+        System.out.println(sb.toString());
         return sb.toString();
     }
 
     @Initialize
     public void init() {
-        System.out.println("init alarm");
         database.executeQuery("CREATE TABLE IF NOT EXISTS" +
                 " alarms (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " name VARCHAR NOT NULL, time VARCHAR, type VARCHAR, enabled INTEGER);");
 
         if(database.doesColumnExist("alarms", "time")) {
-            System.out.println("Alarm database exists.");
             ResultSet set = database.executeQuery("SELECT * FROM alarms;");
             try {
                 while(set.next()) {
-                    System.out.println("Found alarm, checking it");
                     if(set.getInt("enabled") == 1) {
                         chronos.createAlarm(set.getInt("id"), set.getString("time"), set.getString("type"));
                         alarms.add(set.getString("time"));
-                        System.out.println(alarms);
                     }
                 }
             } catch(SQLException e) {
@@ -90,7 +104,7 @@ public class Alarm {
         String alarmType = "once";
         LocalDateTime ldt = LocalDateTime.now();
         String time;
-        time = parseTimeFromSentence(intent.getOriginalSentence(),
+        time = parseTimeFromSentence(parseNumber(intent.getOriginalSentence().split(" ")),
                 ldt.getYear() + "-" + ldt.getMonth().getValue() + "-" + ldt.getDayOfMonth());
 
         // Attempt to load in the time the user wakes up
@@ -110,23 +124,27 @@ public class Alarm {
             }
         }
 
-        if(time == null) {
-            // Time is STILL null... we gotta stop this train before it crashes
-            responder.respondWithMessage("I couldn't hear you say a time, I'm sorry.");
-        } else if(chronos.hasTimerAlreadyPassed(chronos.getDateTimeFromString(time))) {
-            responder.respondWithMessage("The time you are trying to create an alarm for has already passed.");
-        } else {
-            database.executeQuery(String.format("INSERT INTO alarms (name, time, type, enabled) VALUES ('%s', '%s', '%s', 1)",
-                    UserProfile.DEFAULT_USER, time, alarmType));
-            try {
-                ResultSet set = database.executeQuery(String.format("SELECT * FROM alarms WHERE time = '%s' AND type = '%s';",
-                        time, alarmType));
-                chronos.createAlarm(set.getInt("id"), time, alarmType);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            if (time == null) {
+                // Time is STILL null... we gotta stop this train before it crashes
+                responder.respondWithMessage("I couldn't hear you say a time, I'm sorry.");
+            } else if (chronos.hasTimerAlreadyPassed(chronos.getDateTimeFromString(time))) {
+                responder.respondWithMessage("The time you are trying to create an alarm for has already passed.");
+            } else {
+                database.executeQuery(String.format("INSERT INTO alarms (name, time, type, enabled) VALUES ('%s', '%s', '%s', 1)",
+                        UserProfile.DEFAULT_USER, time, alarmType));
+                try {
+                    ResultSet set = database.executeQuery(String.format("SELECT * FROM alarms WHERE time = '%s' AND type = '%s';",
+                            time, alarmType));
+                    chronos.createAlarm(set.getInt("id"), time, alarmType);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
 
-            responder.respondWithMessage("I have set an alarm for " + intent.getOptionalArguments().get("TIME"));
+                responder.respondWithMessage("I have created the alarm for you.");
+            }
+        } catch(DateTimeParseException e) {
+            responder.respondWithMessage("I was unable to create the alarm");
         }
     }
 

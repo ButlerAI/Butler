@@ -1,6 +1,6 @@
 public <time> = (what time is it | what is the time);
 
-public <times> = (<numbers>) [colon] [<numbers>] [<numbers>] [second|seconds|minute|minutes|hour|hours|day|days|o'clock];
+public <times> = (<numbers>) colon [<numbers>] [<numbers>] (o'clock);
 <numbers> =
 the first|
 the second|
@@ -36,4 +36,50 @@ thirty five|
 forty|
 forty five;
 
-public <alarm> = (set | create) (an alarm for) (<times>) (am | pm);
+<daysofweeks> =
+first|
+second|
+third|
+fourth|
+fifth|
+sixth|
+seventh|
+eighth|
+ninth|
+tenth|
+eleventh|
+twelfth|
+thirteenth|
+fourteenth|
+fifteenth|
+sixteenth|
+seventeenth|
+eighteenth|
+nineteenth|
+twenty|
+thirty;
+
+<day> =
+january|
+february|
+march|
+april|
+may|
+june|
+july|
+august|
+september|
+october|
+november|
+december|
+monday|
+tuesday|
+wednesday|
+thursday|
+friday|
+saturday|
+sunday|
+tomorrow|
+today;
+
+public <alarm> = (set | create) (an alarm for) [<day>] [<daysofweeks>] [<daysofweeks>] [at] (<times>) (am | pm);
