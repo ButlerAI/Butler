@@ -1,5 +1,7 @@
 package com.nohowdezign.butler.calendar.chronos;
 
+import com.nohowdezign.butler.database.UserProfile;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -9,6 +11,7 @@ import java.util.Timer;
  * @author Noah Howard
  */
 public class Chronos {
+    private UserProfile profile = new UserProfile();
 
     public void createAlarm(int id, String alarmTime, String alarmType) {
         ZonedDateTime zdt = getDateTimeFromString(alarmTime);
@@ -22,7 +25,8 @@ public class Chronos {
 
     public ZonedDateTime getDateTimeFromString(String alarmTime) {
         LocalDateTime alarmDateTime = LocalDateTime.parse(alarmTime);
-        ZonedDateTime zdt = alarmDateTime.atZone(ZoneId.of("America/New_York"));
+        ZonedDateTime zdt = alarmDateTime.atZone(ZoneId.of(
+                profile.getAttributeFromProfile("timezone", "name", UserProfile.DEFAULT_USER)));
         return zdt;
     }
 

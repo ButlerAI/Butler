@@ -9,6 +9,7 @@ configurations {
 
 dependencies {
     compile project(':engine')
+    compile project(':modules:Calendar')
     // OpenWeatherMap Client and dependencies
     compile 'net.aksingh:owm-japis:2.5.0.3'
 
