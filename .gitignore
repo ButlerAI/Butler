@@ -4,6 +4,8 @@
 *.bak
 /.*
 
+*.db
+
 # Except this stuff
 !.gitattributes
 !.gitignore
