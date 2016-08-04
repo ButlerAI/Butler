@@ -20,7 +20,7 @@ public class UserProfile {
     public UserProfile() {
         db.executeQuery("CREATE TABLE IF NOT EXISTS" +
                 " users (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " name VARCHAR NOT NULL, location VARCHAR);");
+                " name VARCHAR NOT NULL, location VARCHAR, timezone VARCHAR);");
     }
 
     public void load() {
@@ -72,7 +72,7 @@ public class UserProfile {
     public String getAttributeFromProfile(String columnName, String attributeType, String attributeValue) {
         String toReturn = "";
         ResultSet set = db.executeQuery(String.format("SELECT * FROM users where %s = '%s'",
-                columnName, attributeValue));
+                attributeType, attributeValue));
         try {
             toReturn = set.getString(columnName);
         } catch (SQLException e) {

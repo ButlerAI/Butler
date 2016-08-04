@@ -47,7 +47,7 @@ public class Butler {
         new Thread() {
             @Override
             public void run() {
-                input = new VoiceInput(moduleLoader);
+                input = new CLIInput(moduleLoader);
                 input.listenForInput();
             }
         }.start();

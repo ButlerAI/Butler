@@ -15,7 +15,7 @@ public class ProfileConfig {
         String name = "";
         if(intent.getOptionalArguments().containsKey("PERSON")) {
             UserProfile profile = new UserProfile();
-            String newName = intent.getOptionalArguments().get("PERSON").split("_")[0];
+            String newName = intent.getOptionalArguments().get("PERSON");
             profile.setAttributeOnProfile("name", UserProfile.DEFAULT_USER, newName);
             UserProfile.DEFAULT_USER = newName;
             responder.respondWithMessage("I will now call you " + UserProfile.DEFAULT_USER);
