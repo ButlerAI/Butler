@@ -18,4 +18,7 @@ public class EventRegistry {
         return handlers;
     }
 
+    public static void cleanup() {
+        handlers.clear();
+    }
 }

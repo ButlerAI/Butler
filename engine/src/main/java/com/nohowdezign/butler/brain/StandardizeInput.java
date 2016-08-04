@@ -21,7 +21,12 @@ public class StandardizeInput {
         storeEvents();
     }
 
-    private List<Float> standardizeTrigger(String trigger) {
+    public void cleanup() {
+        moduleTriggers.clear();
+        events.clear();
+    }
+
+    public List<Float> standardizeTrigger(String trigger) {
         List<Float> toReturn = new ArrayList<>();
         for(String moduleTrigger : moduleTriggers) {
             if(moduleTrigger.equals(trigger)) {
@@ -33,7 +38,7 @@ public class StandardizeInput {
         return toReturn;
     }
 
-    private List<Float> standardizeEvent(Event event) {
+    public List<Float> standardizeEvent(Event event) {
         List<Float> toReturn = new ArrayList<>();
         for(String storedEvent : events) {
             if(storedEvent.equals(event.getClass().getName())) {
@@ -49,15 +54,15 @@ public class StandardizeInput {
         for (Class<?> handler : EventRegistry.getHandlers()) {
             Method[] methods = handler.getMethods();
 
-            for(int i = 0; i < methods.length; ++i) {
-                ReceiveEvent eventReceiver = methods[i].getAnnotation(ReceiveEvent.class);
+            for(Method method : methods) {
+                ReceiveEvent eventReceiver = method.getAnnotation(ReceiveEvent.class);
                 if (eventReceiver != null) {
-                    Class<?>[] methodParams = methods[i].getParameterTypes();
+                    Class<?>[] methodParams = method.getParameterTypes();
 
                     if (methodParams.length < 1)
                         continue;
 
-                    events.add(methodParams[0].getSimpleName());
+                    events.add(methodParams[0].getName());
                 }
             }
         }

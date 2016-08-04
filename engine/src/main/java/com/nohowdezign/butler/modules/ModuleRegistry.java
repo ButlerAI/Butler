@@ -49,7 +49,7 @@ public class ModuleRegistry {
         moduleClasses.add(map);
     }
 
-    public void reset() {
+    public void cleanup() {
         moduleClasses.clear();
     }
 }

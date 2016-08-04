@@ -13,7 +13,7 @@ public class ModuleLoaderTest {
     public void loadModulesFromDirectory() throws Exception {
         Class loadedClass = null;
         ModuleLoader moduleLoader = new ModuleLoader();
-        moduleLoader.loadModulesFromDirectory("./modules");
+        moduleLoader.loadModulesFromDirectory("./modules-test");
 
         for(Class c : ModuleRegistry.getModuleClasses()) {
             loadedClass = c;
