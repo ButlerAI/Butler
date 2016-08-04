@@ -18,6 +18,14 @@ public class ModuleRegistry {
         return toReturn;
     }
 
+    public static List<String> getModuleTriggers() {
+        List<String> toReturn = new ArrayList<>();
+        for(HashMap<String, Class> map : moduleClasses) {
+            toReturn.addAll(map.keySet());
+        }
+        return toReturn;
+    }
+
     public static Class getModuleClassForIntent(String intent) {
         Class toReturn = null;
         for(HashMap<String, Class> map : moduleClasses) {

@@ -22,7 +22,7 @@ public class DispatchEvent {
         for (Class<?> handler : EventRegistry.getHandlers()) {
             Method[] methods = handler.getMethods();
 
-            for (int i = 0; i < methods.length; ++i) {
+            for(int i = 0; i < methods.length; ++i) {
                 ReceiveEvent eventReceiver = methods[i].getAnnotation(ReceiveEvent.class);
                 if (eventReceiver != null) {
                     Class<?>[] methodParams = methods[i].getParameterTypes();
