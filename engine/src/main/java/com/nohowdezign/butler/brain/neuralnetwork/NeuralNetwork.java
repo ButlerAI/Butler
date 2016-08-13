@@ -13,7 +13,9 @@ public class NeuralNetwork {
 
     public void forward(ArrayList<ArrayList<Double>> inputs) {
         ArrayList<ArrayList<Double>> initialSynapses = createSynapses(inputs, numberOfHiddenNeurons);
+        System.out.println(initialSynapses);
         ArrayList<ArrayList<Double>> initialActivatedSynapses = activateSynapses(initialSynapses);
+        System.out.println(initialActivatedSynapses);
         ArrayList<ArrayList<Double>> secondSynapses = createSynapses(initialActivatedSynapses, numberOfOutputs);
         ArrayList<ArrayList<Double>> finalValue = activateSynapses(secondSynapses);
         System.out.println(finalValue);
