@@ -4,8 +4,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 /**
  * @author Noah Howard
  */
@@ -16,10 +14,10 @@ public class NeuralNetworkTest {
     public void forward() {
         ArrayList<ArrayList<Double>> inputs = new ArrayList<>();
         ArrayList<Double> input = new ArrayList<>();
-        input.add(1.0);
         input.add(0.0);
         input.add(0.0);
-        input.add(0.3333);
+        input.add(0.0);
+        input.add(0.0);
         inputs.add(input);
         neuralNetwork.forward(inputs);
     }

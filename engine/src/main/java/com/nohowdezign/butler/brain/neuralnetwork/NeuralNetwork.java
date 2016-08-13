@@ -11,11 +11,16 @@ public class NeuralNetwork {
     private int numberOfHiddenNeurons = 8;
     private int numberOfOutputs = 4;
 
+    public NeuralNetwork(int hiddenNeurons, int outputs) {
+        this.numberOfHiddenNeurons = hiddenNeurons;
+        this.numberOfOutputs = outputs;
+    }
+
+    public NeuralNetwork() {}
+
     public void forward(ArrayList<ArrayList<Double>> inputs) {
         ArrayList<ArrayList<Double>> initialSynapses = createSynapses(inputs, numberOfHiddenNeurons);
-        System.out.println(initialSynapses);
         ArrayList<ArrayList<Double>> initialActivatedSynapses = activateSynapses(initialSynapses);
-        System.out.println(initialActivatedSynapses);
         ArrayList<ArrayList<Double>> secondSynapses = createSynapses(initialActivatedSynapses, numberOfOutputs);
         ArrayList<ArrayList<Double>> finalValue = activateSynapses(secondSynapses);
         System.out.println(finalValue);
