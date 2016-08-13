@@ -2,10 +2,6 @@ public <time> = (what time is it | what is the time);
 
 public <times> = (<numbers>) colon [<numbers>] [<numbers>] (o'clock);
 <numbers> =
-the first|
-the second|
-the third|
-the last|
 one|
 two|
 three|
