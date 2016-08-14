@@ -18,12 +18,22 @@ public class NeuralNetwork {
 
     public NeuralNetwork() {}
 
-    public void forward(ArrayList<ArrayList<Double>> inputs) {
+    public ArrayList<ArrayList<Double>> forward(ArrayList<ArrayList<Double>> inputs) {
         ArrayList<ArrayList<Double>> initialSynapses = createSynapses(inputs, numberOfHiddenNeurons);
         ArrayList<ArrayList<Double>> initialActivatedSynapses = activateSynapses(initialSynapses);
         ArrayList<ArrayList<Double>> secondSynapses = createSynapses(initialActivatedSynapses, numberOfOutputs);
         ArrayList<ArrayList<Double>> finalValue = activateSynapses(secondSynapses);
-        System.out.println(finalValue);
+        return finalValue;
+    }
+
+    public void trainNeuralNetwork(ArrayList<Double> output, ArrayList<Double> expected) {
+        ArrayList<Double> marginOfError = new ArrayList<>();
+        for (int i = 0; i < output.size(); i++) {
+            // This will use the derivative of sigmoid to estimate the error in the function, that can then be
+            // backpropogated to get better values for weights
+            double deltaSum = (output.get(i) * (1 - output.get(i))) * (expected.get(i) - output.get(i));
+            System.out.println(deltaSum);
+        }
     }
 
     private ArrayList<ArrayList<Double>> createSynapses(ArrayList<ArrayList<Double>> inputs, int iterations) {
