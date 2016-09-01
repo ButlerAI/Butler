@@ -18,25 +18,23 @@ public class NeuralNetwork {
 
     public NeuralNetwork() {}
 
-    public ArrayList<ArrayList<Double>> forward(ArrayList<ArrayList<Double>> inputs) {
-        ArrayList<ArrayList<Double>> initialSynapses = createSynapses(inputs, numberOfHiddenNeurons);
-        ArrayList<ArrayList<Double>> initialActivatedSynapses = activateSynapses(initialSynapses);
-        ArrayList<ArrayList<Double>> secondSynapses = createSynapses(initialActivatedSynapses, numberOfOutputs);
-        ArrayList<ArrayList<Double>> finalValue = activateSynapses(secondSynapses);
-        return finalValue;
-    }
-
-    public void trainNeuralNetwork(ArrayList<Double> output, ArrayList<Double> expected) {
+    public void trainNeuralNetwork(ArrayList<Double> output, ArrayList<Double> expected,
+                                   ArrayList<Double> initialActivatedSynapses, ArrayList<Double> secondSynapses) {
         ArrayList<Double> marginOfError = new ArrayList<>();
-        for (int i = 0; i < output.size(); i++) {
+        // Calculate the margin of error for the second set of weights
+
+        ArrayList<Double> deltaWeights = new ArrayList<>();
+        for(int i = 0; i < output.size(); i++) {
             // This will use the derivative of sigmoid to estimate the error in the function, that can then be
             // backpropogated to get better values for weights
-            double deltaSum = (output.get(i) * (1 - output.get(i))) * (expected.get(i) - output.get(i));
+            double deltaSum = (secondSynapses.get(i) * (1 - secondSynapses.get(i))) * (expected.get(i) - output.get(i));
             System.out.println(deltaSum);
+            //deltaWeights.add(deltaSum / initialActivatedSynapses.get(i));
         }
+        System.out.println(deltaWeights);
     }
 
-    private ArrayList<ArrayList<Double>> createSynapses(ArrayList<ArrayList<Double>> inputs, int iterations) {
+    public ArrayList<ArrayList<Double>> createSynapses(ArrayList<ArrayList<Double>> inputs, int iterations) {
         ArrayList<ArrayList<Double>> synapses = new ArrayList<>();
         for(ArrayList<Double> input : inputs) {
             ArrayList<ArrayList<Double>> weightedValues = new ArrayList<>();
@@ -65,7 +63,7 @@ public class NeuralNetwork {
         return synapses;
     }
 
-    private ArrayList<ArrayList<Double>> activateSynapses(ArrayList<ArrayList<Double>> synapses) {
+    public ArrayList<ArrayList<Double>> activateSynapses(ArrayList<ArrayList<Double>> synapses) {
         ArrayList<ArrayList<Double>> activatedSynapses = new ArrayList<>();
         for(ArrayList<Double> synapseForInput : synapses) {
             ArrayList<Double> activatedInput = new ArrayList<>();
