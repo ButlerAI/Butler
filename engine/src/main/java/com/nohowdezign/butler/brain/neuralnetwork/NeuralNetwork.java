@@ -75,6 +75,24 @@ public class NeuralNetwork {
         return activatedSynapses;
     }
 
+    public void backpropogate(double expectedFinalValue, double actualFinalValue, double valueBeforeSigmoid,
+                              ArrayList<ArrayList<Double>> synapseValues) {
+        double deltaOutputSum = getDeltaOutputSum(expectedFinalValue, actualFinalValue, valueBeforeSigmoid);
+        ArrayList<Double> toReturn = new ArrayList<>();
+        for(ArrayList<Double> synapse : synapseValues) {
+            //
+        }
+    }
+
+    private double getDeltaOutputSum(double expectedValue, double actualValue, double valueBeforeSigmoid) {
+        return (getActivatedValue(valueBeforeSigmoid) * (1 - getActivatedValue(valueBeforeSigmoid)))
+                * (expectedValue - actualValue);
+    }
+
+    private double getChangeInWeight(double weight, double deltaOutputSum) {
+        return deltaOutputSum / weight;
+    }
+
     private double getActivatedValue(double valueToActivate) {
         return 1 / (1 + Math.pow(Math.E, (-1 * valueToActivate)));
     }
