@@ -1,0 +1,14 @@
+public <toggle> = (turn | toggle) (my light) [on | off];
+
+<color> =
+blue|
+gray|
+green|
+magenta|
+orange|
+pink|
+red|
+white|
+yellow;
+
+public <changecolor> = (change | make) (my light) [to] (<color>);
