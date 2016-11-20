@@ -1,6 +1,7 @@
 repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/groups/public/" }
+    maven { url "https://jitpack.io" }
 }
 
 configurations {
@@ -9,12 +10,4 @@ configurations {
 
 dependencies {
     compile project(':engine')
-
-    compile group: 'com.github.besherman', name: 'lifx-sdk-java', version: '2.0'
-
-    releaseJars group: 'com.github.besherman', name: 'lifx-sdk-java', version: '2.0'
-}
-
-jar {
-    from configurations.releaseJars.collect { it.isDirectory() ? it : zipTree(it) }
 }

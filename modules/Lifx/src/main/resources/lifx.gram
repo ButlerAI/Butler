@@ -12,3 +12,20 @@ white|
 yellow;
 
 public <changecolor> = (change | make) (my light) [to] (<color>);
+
+<dimmervals> =
+one|
+five|
+ten|
+fifteen|
+twenty|
+thirty|
+forty|
+fifty|
+sixty|
+seventy|
+eighty|
+ninety|
+hundred;
+
+public <dimlights> = (set | change) (brightness to) (<dimmervals>) [<dimmervals>] [percent];

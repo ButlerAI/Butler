@@ -32,7 +32,6 @@ public class ChangeColor {
 
     @Intent(keyword = "change")
     public void changeLightColor(AbstractIntent intent, Responder responder) {
-        System.out.println("COLOR CHANGE!!!");
         Color color = null;
         for(String word : intent.getOriginalSentence().split(" ")) {
             if(colors.containsKey(word)) {
@@ -44,9 +43,7 @@ public class ChangeColor {
             LFXClient client = new LFXClient();
             try {
                 client.open(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
             try {
